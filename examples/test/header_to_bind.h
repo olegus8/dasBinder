@@ -27,10 +27,12 @@ struct SecondStruct {
     float float_field;
 };
 
-//FIXME: following are used in vulkan but not supported by das yet
+struct StructWithArray {
+    int32_t some_ints[10];
+};
 
 /*
-struct StructWithArray {
+struct StructWithChars {
     char some_chars[10];
 };
 */
