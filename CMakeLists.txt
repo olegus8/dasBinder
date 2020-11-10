@@ -36,4 +36,19 @@ IF(NOT DAS_BINDER_FOUND)
             )
         ENDIF()
     ENDMACRO()
+
+    SET(DAS_BINDER_TEST_SRC
+        ${DAS_BINDER_DIR}/examples/test/main.cpp
+        ${DAS_BINDER_DIR}/examples/test/generated_bindings.cpp
+    )
+
+    add_executable(dasBinderTest ${DAS_BINDER_TEST_SRC})
+    TARGET_LINK_LIBRARIES(dasBinderTest libDaScript)
+    SETUP_CPP11(dasBinderTest)
+
+    DAS_BINDER(
+        ${DAS_BINDER_DIR}/examples/test/header_to_bind.h
+        ${DAS_BINDER_DIR}/examples/test/generated_bindings.cpp
+        ${DAS_BINDER_DIR}/examples/test/binding_config.py
+    )
 ENDIF()
