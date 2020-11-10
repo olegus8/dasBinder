@@ -4,7 +4,7 @@ IF(NOT DAS_BINDER_INCLUDED)
 
     find_package(Python3)
 
-    SET(DAS_BINDER_DIR ${PROJECT_SOURCE_DIR}/modules/dasBinder)
+    SET(DAS_BINDER_DIR ${CMAKE_SOURCE_DIR}/modules/dasBinder)
     SET(DAS_BINDER_PY_DIR ${DAS_BINDER_DIR}/python_modules/das_binder)
 
     SET(DAS_BINDER_SRC
@@ -23,7 +23,7 @@ IF(NOT DAS_BINDER_INCLUDED)
         ELSE()
             ADD_CUSTOM_COMMAND(
                 DEPENDS ${c_header_from} ${config} ${DAS_BINDER_SRC} ${DAS_BINDER_SHARED_SRC}
-                OUTPUT ${CMAKE_SOURCE_DIR}/${module_to}
+                OUTPUT ${module_to}
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                 VERBATIM
                 COMMAND ${Python3_EXECUTABLE} -B ${DAS_BINDER_PY_DIR}/main.py
