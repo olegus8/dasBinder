@@ -31,6 +31,8 @@ struct StructWithArray {
     int32_t some_ints[10];
 };
 
+//FIXME: following are used in vulkan but not supported by das yet
+
 /*
 struct StructWithChars {
     char some_chars[10];

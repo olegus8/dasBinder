@@ -64,6 +64,17 @@ struct StructWithArrayAnnotation
     virtual bool canCopy() const override { return true; }
     virtual bool canMove() const override { return true; }
 };
+MAKE_TYPE_FACTORY(StructWithChars, StructWithChars);
+struct StructWithCharsAnnotation
+: public ManagedStructureAnnotation<StructWithChars,true,true> {
+    StructWithCharsAnnotation(ModuleLibrary & ml)
+    : ManagedStructureAnnotation ("StructWithChars", ml) {
+        addField<DAS_BIND_MANAGED_FIELD(some_chars)>("some_chars");
+    }
+    virtual bool isLocal() const override { return true; }
+    virtual bool canCopy() const override { return true; }
+    virtual bool canMove() const override { return true; }
+};
 
 class Module_generatedBindings : public Module {
 public:
@@ -86,6 +97,7 @@ public:
         addAnnotation(make_smart<FirstStructAnnotation>(lib));
         addAnnotation(make_smart<SecondStructAnnotation>(lib));
         addAnnotation(make_smart<StructWithArrayAnnotation>(lib));
+        addAnnotation(make_smart<StructWithCharsAnnotation>(lib));
     }
 };
 
