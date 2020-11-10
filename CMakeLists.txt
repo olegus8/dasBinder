@@ -1,5 +1,5 @@
 IF(NOT DAS_BINDER_FOUND)
-    SET(DAS_BINDER_FOUND ON)
+    SET(DAS_BINDER_FOUND TRUE)
 
     find_package(Python3)
 
