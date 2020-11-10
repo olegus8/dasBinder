@@ -1,5 +1,6 @@
 IF(NOT DAS_BINDER_INCLUDED)
     SET(DAS_BINDER_INCLUDED TRUE)
+    MESSAGE(STATUS "dasBinder module included.")
 
     find_package(Python3)
 
