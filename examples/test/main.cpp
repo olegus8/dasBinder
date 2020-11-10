@@ -139,7 +139,7 @@ int main( int argc, char * argv[] ) {
 
     uint64_t timeStamp = ref_time_ticks();
     bool ok = true;
-    ok = unit_test(getDasRoot() +  "/modules/dasBinder/examples/test/test_binding.das", false) && ok;
+    ok = unit_test(getDasRoot() +  "/modules/dasBinder/examples/test/test_binding.das") && ok;
     int usec = get_time_usec(timeStamp);
     tout << "TESTS " << (ok ? "PASSED " : "FAILED!!! ") << ((usec/1000)/1000.0) << "\n";
     // shutdown
