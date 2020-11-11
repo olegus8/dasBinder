@@ -357,7 +357,7 @@ class C_Struct(C_InnerNode):
            f'MAKE_TYPE_FACTORY({self.name}, {self.name});',
         ]
         for field in self.fields:
-            if not f.is_bit_field:
+            if not field.is_bit_field:
                 continue
             lines += [
                 '',
@@ -376,7 +376,7 @@ class C_Struct(C_InnerNode):
                         for f in self.fields if not f.is_bit_field
         ]
         for field in self.fields:
-            if not f.is_bit_field:
+            if not field.is_bit_field:
                 continue
             lines += [
                 '',
