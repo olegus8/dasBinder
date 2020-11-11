@@ -430,8 +430,9 @@ class C_OpaqueStruct(C_InnerNode):
 
     def generate_add(self):
         dt = self.__dummy_type
-        return [f'addAnnotation(make_smart<DummyTypeAnnotation>('
-            f'"{dt}", "{dt}", sizeof({dt}), alignof({dt})));']
+        return [
+            f'addAnnotation(make_smart<DummyTypeAnnotation>("{dt}", "{dt}",',
+            f'    sizeof({dt}), alignof({dt})));']
 
 
 class C_StructField(C_InnerNode):
