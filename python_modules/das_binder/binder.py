@@ -223,6 +223,11 @@ class C_TranslationUnit(LoggingObject):
     @property
     def opaque_structs(self):
         if self.__cached_opaque_structs is None:
+            regular_struct_names = set(s.name for s in self.structs)
+            self.__cached_opaque_structs = [s for s in self.__get_nodes(
+                node_class=C_OpaqueStruct,
+                configure_fn=self.__config.configure_opaque_struct
+            ) if s.name not in regular_struct_names]
         return self.__cached_opaque_structs
 
 
@@ -350,6 +355,36 @@ class C_Struct(C_InnerNode):
 
     def generate_add(self):
         return [f'addAnnotation(make_smart<{self.name}Annotation>(lib));']
+
+
+class C_OpaqueStruct(C_InnerNode):
+
+    def __init__(self, **kwargs):
+        super(C_OpaqueStruct, self).__init__(**kwargs)
+        self.__dummy_type = None
+
+    def set_dummy_type(self, dummy_type):
+        self.__dummy_type = dummy_type
+
+    @staticmethod
+    def maybe_create(root, **kwargs):
+        if (root['kind'] == 'RecordDecl'
+            and root['tagUsed'] in ['struct', 'union']
+            and 'name' in root
+            and 'inner' not in root
+        ):
+            return C_OpaqueStruct(root=root, **kwargs)
+
+    def generate_decl(self):
+        dummy_type = self.__dummy_type
+        if dummy_type is None:
+            raise BinderError(f'Must set dummy type name for {self.name}')
+        return [f'MAKE_TYPE_FACTORY({dummy_type}, {dummy_type})']
+
+    def generate_add(self):
+        dt = self.__dummy_type
+        return [f'addAnnotation(make_smart<DummyTypeAnnotation>('
+            f'"{dt}", "{dt}", sizeof({dt}), alignof({dt})));']
 
 
 class C_StructField(C_InnerNode):
