@@ -68,8 +68,7 @@ class Settings(object):
 
 class Binder(LoggingObject):
 
-    def __init__(self, argv, **kwargs):
-        super(Binder, self).__init__(self, **kwargs)
+    def __init__(self, argv):
         self.__settings = Settings(argv=argv[1:])
         self.__config = self.__read_config(self.__settings.config_fpath)
         self.__c_header = C_TranslationUnit(
@@ -180,10 +179,7 @@ class Binder(LoggingObject):
 
 class C_TranslationUnit(LoggingObject):
 
-    def __init__(self, c_src_fpath, clang_c_exe, include_dirs, config,
-        **kwargs
-    ):
-        super(C_TranslationUnit, self).__init__(self, **kwargs)
+    def __init__(self, c_src_fpath, clang_c_exe, include_dirs, config):
         cmd = []
         cmd += [clang_c_exe, '-cc1', '-ast-dump=json']
         for dpath in include_dirs:
