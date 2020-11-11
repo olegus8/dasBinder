@@ -361,8 +361,8 @@ class C_Struct(C_InnerNode):
                 continue
             lines += [
                 '',
-               f'__forceinline {field.type} {field.getter_name}(const {self.name} &s) { return f.{field.name}; }',
-               f'__forceinline void {field.setter_name}({self.name} &s, {field.type} f) { s.{field.name} = f; }',
+               f'__forceinline {field.type} {field.getter_name}(const {self.name} &s) {{ return f.{field.name}; }}',
+               f'__forceinline void {field.setter_name}({self.name} &s, {field.type} f) {{ s.{field.name} = f; }}',
             ]
         lines += [
             '',
