@@ -375,16 +375,6 @@ class C_Struct(C_InnerNode):
            f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.name}");'
                         for f in self.fields if not f.is_bit_field
         ]
-        for field in self.fields:
-            if not field.is_bit_field:
-                continue
-            lines += [
-                '',
-               f'        addExtern<DAS_BIND_FUN({field.getter_name})>(*this, lib, "{field.getter_name}",',
-                '            SideEffects::none, "{field.getter_name}");',
-               f'        addExtern<DAS_BIND_FUN({field.setter_name})>(*this, lib, "{field.setter_name}",',
-                '            SideEffects::modifyArgument, "{field.setter_name}");',
-            ]
         lines += [
             '    }',
            f'    virtual bool isLocal() const override {{ return {is_local}; }}',
@@ -395,7 +385,23 @@ class C_Struct(C_InnerNode):
         return lines
 
     def generate_add(self):
-        return [f'addAnnotation(make_smart<{self.name}Annotation>(lib));']
+        lines = []
+        for field in self.fields:
+            if not field.is_bit_field:
+                continue
+            lines += [
+                '',
+               f'addExtern<DAS_BIND_FUN({field.getter_name})>(*this, lib, "{field.getter_name}",',
+                '    SideEffects::none, "{field.getter_name}");',
+               f'addExtern<DAS_BIND_FUN({field.setter_name})>(*this, lib, "{field.setter_name}",',
+                '    SideEffects::modifyArgument, "{field.setter_name}");',
+            ]
+        if lines:
+            lines += ['']
+        lines += [
+            f'addAnnotation(make_smart<{self.name}Annotation>(lib));',
+        ]
+        return lines
 
 
 class C_OpaqueStruct(C_InnerNode):
