@@ -179,8 +179,6 @@ class C_TranslationUnit(LoggingObject):
         out, err, exit_code = run_exec(cmd)
         self.__root = json.loads(out)
         self.__config = config
-        self.__cached_structs = None
-        self.__cached_enums = None
 
     def __get_nodes(self, node_class, configure_fn):
         for inner in self.__root['inner']:
@@ -194,17 +192,13 @@ class C_TranslationUnit(LoggingObject):
 
     @property
     def enums(self):
-        if self.__cached_enums is None:
-            self.__cached_enums = list(self.__get_nodes(node_class=C_Enum,
-                configure_fn=self.__config.configure_enum))
-        return self.__cached_enums
+        return self.__get_nodes(node_class=C_Enum,
+            configure_fn=self.__config.configure_enum)
 
     @property
     def structs(self):
-        if self.__cached_structs is None:
-            self.__cached_structs = list(self.__get_nodes(node_class=C_Struct,
-                configure_fn=self.__config.configure_struct))
-        return self.__cached_structs
+        return self.__get_nodes(node_class=C_Struct,
+            configure_fn=self.__config.configure_struct)
 
 
 class C_InnerNode(object):
