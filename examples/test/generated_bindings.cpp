@@ -32,7 +32,9 @@ DAS_BASE_BIND_ENUM(SecondEnum, SecondEnum
 // structs
 //
 
+
 MAKE_TYPE_FACTORY(FirstStruct, FirstStruct);
+
 struct FirstStructAnnotation
 : public ManagedStructureAnnotation<FirstStruct,true,true> {
     FirstStructAnnotation(ModuleLibrary & ml)
@@ -45,7 +47,9 @@ struct FirstStructAnnotation
     virtual bool canCopy() const override { return true; }
     virtual bool canMove() const override { return true; }
 };
+
 MAKE_TYPE_FACTORY(SecondStruct, SecondStruct);
+
 struct SecondStructAnnotation
 : public ManagedStructureAnnotation<SecondStruct,true,true> {
     SecondStructAnnotation(ModuleLibrary & ml)
@@ -58,7 +62,9 @@ struct SecondStructAnnotation
     virtual bool canCopy() const override { return true; }
     virtual bool canMove() const override { return true; }
 };
+
 MAKE_TYPE_FACTORY(StructWithArray, StructWithArray);
+
 struct StructWithArrayAnnotation
 : public ManagedStructureAnnotation<StructWithArray,true,true> {
     StructWithArrayAnnotation(ModuleLibrary & ml)
