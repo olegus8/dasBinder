@@ -135,6 +135,15 @@ class Binder(LoggingObject):
         lines += [
             '',
             '//',
+            '// opaque structs',
+            '//',
+            ''] + [
+            line for struct in self.__c_header.opaque_structs
+                for line in struct.generate_decl()
+        ]
+        lines += [
+            '',
+            '//',
             '// structs',
             '//',
             ''] + [
@@ -158,6 +167,15 @@ class Binder(LoggingObject):
             ''] + [
            f'        {line}' for enum in self.__c_header.enums
                         for line in enum.generate_add()
+        ]
+        lines += [
+            '',
+            '        //',
+            '        // opaque structs',
+            '        //',
+            ''] + [
+           f'        {line}' for struct in self.__c_header.opaque_structs
+                        for line in struct.generate_add()
         ]
         lines += [
             '',
