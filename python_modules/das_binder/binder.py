@@ -341,7 +341,8 @@ class C_Struct(C_InnerNode):
     def fields(self):
         for inner in self.root['inner']:
             if inner['kind'] == 'FieldDecl':
-                field = C_StructField(root=inner, config=self.config)
+                field = C_StructField(root=inner, config=self.config,
+                    struct=self)
                 self.config.configure_struct_field(field=field)
                 if not field.is_ignored:
                     yield field
@@ -355,13 +356,13 @@ class C_Struct(C_InnerNode):
             '',
            f'MAKE_TYPE_FACTORY({self.name}, {self.name});',
         ]
-        for f in self.fields:
+        for field in self.fields:
             if not f.is_bit_field:
                 continue
             lines += [
                 '',
-               f'__forceinline {f.type} {self.name}_get_{f.name}(const {self.name} &s) { return f.{f.name}; }',
-               f'__forceinline void {self.name}_set_{f.name}({self.name} &s, {f.type} f) { s.{f.name} = f; }',
+               f'__forceinline {field.type} {field.getter_name}(const {self.name} &s) { return f.{field.name}; }',
+               f'__forceinline void {field.setter_name}({self.name} &s, {field.type} f) { s.{field.name} = f; }',
             ]
         lines += [
             '',
@@ -374,6 +375,16 @@ class C_Struct(C_InnerNode):
            f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.name}");'
                         for f in self.fields if not f.is_bit_field
         ]
+        for field in self.fields:
+            if not f.is_bit_field:
+                continue
+            lines += [
+                '',
+               f'addExtern<DAS_BIND_FUN({field.getter_name})>(*this, lib, "{field.getter_name}",',
+                '    SideEffects::none, "{field.getter_name}");',
+               f'addExtern<DAS_BIND_FUN({field.setter_name})>(*this, lib, "{field.setter_name}",',
+                '    SideEffects::modifyArgument, "{field.setter_name}");',
+            ]
         lines += [
             '    }',
            f'    virtual bool isLocal() const override {{ return {is_local}; }}',
@@ -419,6 +430,10 @@ class C_OpaqueStruct(C_InnerNode):
 
 class C_StructField(C_InnerNode):
 
+    def __init__(self, struct, **kwargs):
+        super(C_StructField, self).__init__(self, **kwargs)
+        self.__struct = struct
+
     @property
     def type(self):
         t = self.root['type']
@@ -431,6 +446,14 @@ class C_StructField(C_InnerNode):
     @property
     def is_bit_field(self):
         return self.root.get('isBitfield', False)
+
+    @property
+    def setter_name(self):
+        return f'{self.__struct.name}_set_{self.name}'
+
+    @property
+    def getter_name(self):
+        return f'{self.__struct.name}_get_{self.name}'
 
 
 def to_cpp_bool(b):
