@@ -431,7 +431,7 @@ class C_OpaqueStruct(C_InnerNode):
 class C_StructField(C_InnerNode):
 
     def __init__(self, struct, **kwargs):
-        super(C_StructField, self).__init__(self, **kwargs)
+        super(C_StructField, self).__init__(**kwargs)
         self.__struct = struct
 
     @property
