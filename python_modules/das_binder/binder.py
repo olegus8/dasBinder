@@ -95,7 +95,7 @@ class Binder(LoggingObject):
             return
         ast_fpath = self.__settings.module_to + '.ast.json'
         write_to_file(fpath=ast_fpath, content=json.dumps(self.__c_header.root,
-            indent=2, sort_keys=True))
+            indent=4, sort_keys=True))
         self._log_info(f'Wrote AST for C header to {ast_fpath}')
 
     def __read_config(self, config_fpath):
