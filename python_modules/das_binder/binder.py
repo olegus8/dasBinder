@@ -380,10 +380,10 @@ class C_Struct(C_InnerNode):
                 continue
             lines += [
                 '',
-               f'addExtern<DAS_BIND_FUN({field.getter_name})>(*this, lib, "{field.getter_name}",',
-                '    SideEffects::none, "{field.getter_name}");',
-               f'addExtern<DAS_BIND_FUN({field.setter_name})>(*this, lib, "{field.setter_name}",',
-                '    SideEffects::modifyArgument, "{field.setter_name}");',
+               f'        addExtern<DAS_BIND_FUN({field.getter_name})>(*this, lib, "{field.getter_name}",',
+                '            SideEffects::none, "{field.getter_name}");',
+               f'        addExtern<DAS_BIND_FUN({field.setter_name})>(*this, lib, "{field.setter_name}",',
+                '            SideEffects::modifyArgument, "{field.setter_name}");',
             ]
         lines += [
             '    }',
