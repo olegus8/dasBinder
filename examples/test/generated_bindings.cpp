@@ -24,6 +24,11 @@ DAS_BASE_BIND_ENUM(SecondEnum, SecondEnum
 )
 
 //
+// opaque structs
+//
+
+
+//
 // structs
 //
 
@@ -78,6 +83,11 @@ public:
 
         addEnumeration(make_smart<EnumerationFirstEnum>());
         addEnumeration(make_smart<EnumerationSecondEnum>());
+
+        //
+        // opaque structs
+        //
+
 
         //
         // structs
