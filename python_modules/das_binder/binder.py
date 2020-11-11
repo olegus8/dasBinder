@@ -353,6 +353,12 @@ class C_Struct(C_InnerNode):
         lines = []
         lines += [
            f'MAKE_TYPE_FACTORY({self.name}, {self.name});',
+        ]
+        lines += [
+           f'__forceinline {f.type} {self.name}_get_{f.name}(const {self.name} &s) { return f.{f.name}; }',
+           f'__forceinline void {self.name}_set_{f.name}({self.name} &s, {f.type} f) { s.{f.name} = f; }',
+        ]
+        lines += [
            f'struct {self.name}Annotation',
            f': public ManagedStructureAnnotation<{self.name},true,true> {{',
            f'    {self.name}Annotation(ModuleLibrary & ml)',
@@ -360,7 +366,7 @@ class C_Struct(C_InnerNode):
         ]
         lines += [
            f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.name}");'
-                        for f in self.fields
+                        for f in self.fields if not f.is_bit_field
         ]
         lines += [
             '    }',
