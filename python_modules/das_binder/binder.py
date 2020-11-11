@@ -423,9 +423,7 @@ class C_OpaqueStruct(C_InnerNode):
             return C_OpaqueStruct(root=root, **kwargs)
 
     def generate_decl(self):
-        dummy_type = self.__dummy_type
-        if dummy_type is None:
-            raise BinderError(f'Must set dummy type name for {self.name}')
+        dummy_type = self.__dummy_type or self.name
         return [f'MAKE_TYPE_FACTORY({dummy_type}, {dummy_type})']
 
     def generate_add(self):
