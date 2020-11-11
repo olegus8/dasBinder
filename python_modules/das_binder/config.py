@@ -10,6 +10,10 @@ class ConfigBase(object):
         '''C header for which to generate bindings, but in the form suitable for #include in generated das::Module cpp file.'''
         raise NotImplementedError()
 
+    @property
+    def save_ast(self):
+        return False
+
     def configure_enum(self, enum):
         '''This function is called for each encountered enum.'''
         pass

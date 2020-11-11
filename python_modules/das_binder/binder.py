@@ -68,7 +68,8 @@ class Settings(object):
 
 class Binder(LoggingObject):
 
-    def __init__(self, argv):
+    def __init__(self, argv, **kwargs):
+        super(Binder, self).__init__(self, **kwargs)
         self.__settings = Settings(argv=argv[1:])
         self.__config = self.__read_config(self.__settings.config_fpath)
         self.__c_header = C_TranslationUnit(
@@ -82,11 +83,20 @@ class Binder(LoggingObject):
             format='%(asctime)s [%(levelname)s:%(name)s] %(message)s')
         self._log_info(f'Generating bindings for '
             f'{self.__settings.c_header_from}')
+        self.__maybe_save_ast()
         write_to_file(fpath=self.__settings.module_to,
             content='\n'.join(self.__generate_module() + ['']))
         self._log_info(f'Wrote generated das::Module to '
             f'{self.__settings.module_to}')
         self._log_info('Finished successfully.')
+
+    def __maybe_save_ast(self):
+        if not self.__config.save_ast:
+            return
+        ast_fpath = self.__settings.module_to + '.ast.json'
+        write_to_file(fpath=ast_fpath, content=json.dumps(self.__c_header.root,
+            indent=2, sort_keys=True))
+        self._log_info(f'Wrote AST for C header to {ast_fpath}')
 
     def __read_config(self, config_fpath):
         cfg_globals = {}
@@ -170,7 +180,10 @@ class Binder(LoggingObject):
 
 class C_TranslationUnit(LoggingObject):
 
-    def __init__(self, c_src_fpath, clang_c_exe, include_dirs, config):
+    def __init__(self, c_src_fpath, clang_c_exe, include_dirs, config,
+        **kwargs
+    ):
+        super(C_TranslationUnit, self).__init__(self, **kwargs)
         cmd = []
         cmd += [clang_c_exe, '-cc1', '-ast-dump=json']
         for dpath in include_dirs:
@@ -189,6 +202,10 @@ class C_TranslationUnit(LoggingObject):
                     continue
                 configure_fn(node)
                 yield node
+
+    @property
+    def root(self):
+        return self.__root
 
     @property
     def enums(self):
