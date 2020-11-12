@@ -447,6 +447,10 @@ class C_StructField(C_InnerNode):
         self.__struct = struct
 
     @property
+    def struct(self):
+        return self.__struct
+
+    @property
     def type(self):
         t = self.root['type']
         return t.get('desugaredQualType', t['qualType'])
