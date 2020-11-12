@@ -13,7 +13,7 @@ def test
     assert(struct1.bool_field == !struct2.bool_field);
 
     // bit fields
-    let bfstruct = [[StructWithBitFields]]
+    var bfstruct = [[StructWithBitFields]]
     StructWithBitFields_set_field8(bfstruct, 123u)
     assert(StructWithBitFields_get_field8(bfstruct) == 123u);
 
