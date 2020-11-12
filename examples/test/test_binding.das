@@ -12,4 +12,9 @@ def test
     let struct2 = [[SecondStruct bool_field=false]];
     assert(struct1.bool_field == !struct2.bool_field);
 
+    // bit fields
+    let bfstruct = [[StructWithBitFields]]
+    StructWithBitfields_set_field8(bfstruct, 123)
+    assert(StructWithBitfields_get_field8(bfstruct) == 123);
+
     return true

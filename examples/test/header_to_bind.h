@@ -39,12 +39,10 @@ struct StructWithChars {
 };
 */
 
-/*
 struct StructWithBitFields {
     uint32_t field24:24;
     uint32_t field8:8;
 };
-*/
 
 /*
 struct StructWithSizeT {
