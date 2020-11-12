@@ -374,7 +374,7 @@ class C_Struct(C_InnerNode):
         lines += [
            f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.name}");'
                         for f in self.fields
-                        if not f.is_bit_field and not f.self_ref
+                        if not f.is_bit_field and not f.is_self_ref
         ]
         lines += [
             '    }',
@@ -382,7 +382,7 @@ class C_Struct(C_InnerNode):
         ]
         lines += [
            f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.name}");'
-                        for f in self.fields if f.self_ref
+                        for f in self.fields if f.is_self_ref
         ]
         lines += [
             '    }',
@@ -458,6 +458,10 @@ class C_StructField(C_InnerNode):
     @property
     def is_bit_field(self):
         return self.root.get('isBitfield', False)
+
+    @property
+    def is_self_ref(self):
+        return self.__struct.name in self.type.split()
 
     @property
     def setter_name(self):
