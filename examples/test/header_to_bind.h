@@ -38,17 +38,13 @@ struct StructWithBitFields {
 
 //FIXME: following are used in vulkan but not supported by das yet
 
-/*
 struct StructWithChars {
     char some_chars[10];
 };
-*/
 
-/*
 struct StructWithSizeT {
     size_t my_size;
 };
-*/
 
 /*
 typedef struct SomeOpaqueData_T * SomeOpaqueHandle;

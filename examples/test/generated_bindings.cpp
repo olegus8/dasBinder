@@ -102,6 +102,36 @@ struct StructWithBitFieldsAnnotation
     virtual bool canMove() const override { return true; }
 };
 
+MAKE_TYPE_FACTORY(StructWithChars, StructWithChars);
+
+struct StructWithCharsAnnotation
+: public ManagedStructureAnnotation<StructWithChars,true,true> {
+    StructWithCharsAnnotation(ModuleLibrary & ml)
+    : ManagedStructureAnnotation ("StructWithChars", ml) {
+        addField<DAS_BIND_MANAGED_FIELD(some_chars)>("some_chars");
+    }
+    void init() {
+    }
+    virtual bool isLocal() const override { return true; }
+    virtual bool canCopy() const override { return true; }
+    virtual bool canMove() const override { return true; }
+};
+
+MAKE_TYPE_FACTORY(StructWithSizeT, StructWithSizeT);
+
+struct StructWithSizeTAnnotation
+: public ManagedStructureAnnotation<StructWithSizeT,true,true> {
+    StructWithSizeTAnnotation(ModuleLibrary & ml)
+    : ManagedStructureAnnotation ("StructWithSizeT", ml) {
+        addField<DAS_BIND_MANAGED_FIELD(my_size)>("my_size");
+    }
+    void init() {
+    }
+    virtual bool isLocal() const override { return true; }
+    virtual bool canCopy() const override { return true; }
+    virtual bool canMove() const override { return true; }
+};
+
 class Module_generatedBindings : public Module {
 public:
     Module_generatedBindings() : Module("generatedBindings") {
@@ -139,6 +169,8 @@ public:
             SideEffects::none, "{field.getter_name}");
         addExtern<DAS_BIND_FUN(StructWithBitFields_set_field8)>(*this, lib, "StructWithBitFields_set_field8",
             SideEffects::modifyArgument, "{field.setter_name}");
+        addAnnotation(make_smart<StructWithCharsAnnotation>(lib));
+        addAnnotation(make_smart<StructWithSizeTAnnotation>(lib));
     }
 };
 
