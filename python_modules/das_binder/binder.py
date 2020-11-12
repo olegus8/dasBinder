@@ -373,7 +373,16 @@ class C_Struct(C_InnerNode):
         ]
         lines += [
            f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.name}");'
-                        for f in self.fields if not f.is_bit_field
+                        for f in self.fields
+                        if not f.is_bit_field and not f.self_ref
+        ]
+        lines += [
+            '    }',
+            '    void init() {',
+        ]
+        lines += [
+           f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.name}");'
+                        for f in self.fields if f.self_ref
         ]
         lines += [
             '    }',
