@@ -43,6 +43,8 @@ struct FirstStructAnnotation
         addField<DAS_BIND_MANAGED_FIELD(int_field)>("int_field");
         addField<DAS_BIND_MANAGED_FIELD(float_field)>("float_field");
     }
+    void init() {
+    }
     virtual bool isLocal() const override { return true; }
     virtual bool canCopy() const override { return true; }
     virtual bool canMove() const override { return true; }
@@ -58,6 +60,8 @@ struct SecondStructAnnotation
         addField<DAS_BIND_MANAGED_FIELD(int_field)>("int_field");
         addField<DAS_BIND_MANAGED_FIELD(float_field)>("float_field");
     }
+    void init() {
+    }
     virtual bool isLocal() const override { return true; }
     virtual bool canCopy() const override { return true; }
     virtual bool canMove() const override { return true; }
@@ -70,6 +74,8 @@ struct StructWithArrayAnnotation
     StructWithArrayAnnotation(ModuleLibrary & ml)
     : ManagedStructureAnnotation ("StructWithArray", ml) {
         addField<DAS_BIND_MANAGED_FIELD(some_ints)>("some_ints");
+    }
+    void init() {
     }
     virtual bool isLocal() const override { return true; }
     virtual bool canCopy() const override { return true; }
@@ -88,6 +94,8 @@ struct StructWithBitFieldsAnnotation
 : public ManagedStructureAnnotation<StructWithBitFields,true,true> {
     StructWithBitFieldsAnnotation(ModuleLibrary & ml)
     : ManagedStructureAnnotation ("StructWithBitFields", ml) {
+    }
+    void init() {
     }
     virtual bool isLocal() const override { return true; }
     virtual bool canCopy() const override { return true; }
