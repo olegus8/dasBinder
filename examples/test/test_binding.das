@@ -14,7 +14,7 @@ def test
 
     // bit fields
     let bfstruct = [[StructWithBitFields]]
-    StructWithBitFields_set_field8(bfstruct, 123)
-    assert(StructWithBitFields_get_field8(bfstruct) == 123);
+    StructWithBitFields_set_field8(bfstruct, uint32(123))
+    assert(StructWithBitFields_get_field8(bfstruct) == uint32(123))
 
     return true
