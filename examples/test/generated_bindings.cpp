@@ -76,6 +76,24 @@ struct StructWithArrayAnnotation
     virtual bool canMove() const override { return true; }
 };
 
+MAKE_TYPE_FACTORY(StructWithBitFields, StructWithBitFields);
+
+__forceinline unsigned int StructWithBitFields_get_field24(const StructWithBitFields &s) { return s.field24; }
+__forceinline void StructWithBitFields_set_field24(StructWithBitFields &s, unsigned int f) { s.field24 = f; }
+
+__forceinline unsigned int StructWithBitFields_get_field8(const StructWithBitFields &s) { return s.field8; }
+__forceinline void StructWithBitFields_set_field8(StructWithBitFields &s, unsigned int f) { s.field8 = f; }
+
+struct StructWithBitFieldsAnnotation
+: public ManagedStructureAnnotation<StructWithBitFields,true,true> {
+    StructWithBitFieldsAnnotation(ModuleLibrary & ml)
+    : ManagedStructureAnnotation ("StructWithBitFields", ml) {
+    }
+    virtual bool isLocal() const override { return true; }
+    virtual bool canCopy() const override { return true; }
+    virtual bool canMove() const override { return true; }
+};
+
 class Module_generatedBindings : public Module {
 public:
     Module_generatedBindings() : Module("generatedBindings") {
@@ -102,6 +120,18 @@ public:
         addAnnotation(make_smart<FirstStructAnnotation>(lib));
         addAnnotation(make_smart<SecondStructAnnotation>(lib));
         addAnnotation(make_smart<StructWithArrayAnnotation>(lib));
+        
+        addExtern<DAS_BIND_FUN(StructWithBitFields_get_field24)>(*this, lib, "StructWithBitFields_get_field24",
+            SideEffects::none, "{field.getter_name}");
+        addExtern<DAS_BIND_FUN(StructWithBitFields_set_field24)>(*this, lib, "StructWithBitFields_set_field24",
+            SideEffects::modifyArgument, "{field.setter_name}");
+        
+        addExtern<DAS_BIND_FUN(StructWithBitFields_get_field8)>(*this, lib, "StructWithBitFields_get_field8",
+            SideEffects::none, "{field.getter_name}");
+        addExtern<DAS_BIND_FUN(StructWithBitFields_set_field8)>(*this, lib, "StructWithBitFields_set_field8",
+            SideEffects::modifyArgument, "{field.setter_name}");
+        
+        addAnnotation(make_smart<StructWithBitFieldsAnnotation>(lib));
     }
 };
 

@@ -31,6 +31,11 @@ struct StructWithArray {
     int32_t some_ints[10];
 };
 
+struct StructWithBitFields {
+    uint32_t field24:24;
+    uint32_t field8:8;
+};
+
 //FIXME: following are used in vulkan but not supported by das yet
 
 /*
@@ -38,11 +43,6 @@ struct StructWithChars {
     char some_chars[10];
 };
 */
-
-struct StructWithBitFields {
-    uint32_t field24:24;
-    uint32_t field8:8;
-};
 
 /*
 struct StructWithSizeT {
