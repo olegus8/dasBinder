@@ -386,6 +386,9 @@ class C_Struct(C_InnerNode):
 
     def generate_add(self):
         lines = []
+        lines += [
+            f'addAnnotation(make_smart<{self.name}Annotation>(lib));',
+        ]
         for field in self.fields:
             if not field.is_bit_field:
                 continue
@@ -396,11 +399,6 @@ class C_Struct(C_InnerNode):
                f'addExtern<DAS_BIND_FUN({field.setter_name})>(*this, lib, "{field.setter_name}",',
                 '    SideEffects::modifyArgument, "{field.setter_name}");',
             ]
-        if lines:
-            lines += ['']
-        lines += [
-            f'addAnnotation(make_smart<{self.name}Annotation>(lib));',
-        ]
         return lines
 
 
