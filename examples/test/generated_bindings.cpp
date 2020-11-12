@@ -78,11 +78,11 @@ struct StructWithArrayAnnotation
 
 MAKE_TYPE_FACTORY(StructWithBitFields, StructWithBitFields);
 
-__forceinline unsigned int StructWithBitFields_get_field24(const StructWithBitFields &s) { return s.field24; }
-__forceinline void StructWithBitFields_set_field24(StructWithBitFields &s, unsigned int f) { s.field24 = f; }
+__forceinline unsigned int StructWithBitFields_get_field24(const StructWithBitFields const &s) { return s.field24; }
+__forceinline void StructWithBitFields_set_field24(StructWithBitFields const &s, unsigned int f) { s.field24 = f; }
 
-__forceinline unsigned int StructWithBitFields_get_field8(const StructWithBitFields &s) { return s.field8; }
-__forceinline void StructWithBitFields_set_field8(StructWithBitFields &s, unsigned int f) { s.field8 = f; }
+__forceinline unsigned int StructWithBitFields_get_field8(const StructWithBitFields const &s) { return s.field8; }
+__forceinline void StructWithBitFields_set_field8(StructWithBitFields const &s, unsigned int f) { s.field8 = f; }
 
 struct StructWithBitFieldsAnnotation
 : public ManagedStructureAnnotation<StructWithBitFields,true,true> {
