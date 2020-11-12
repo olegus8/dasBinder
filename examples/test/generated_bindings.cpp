@@ -120,6 +120,7 @@ public:
         addAnnotation(make_smart<FirstStructAnnotation>(lib));
         addAnnotation(make_smart<SecondStructAnnotation>(lib));
         addAnnotation(make_smart<StructWithArrayAnnotation>(lib));
+        addAnnotation(make_smart<StructWithBitFieldsAnnotation>(lib));
         
         addExtern<DAS_BIND_FUN(StructWithBitFields_get_field24)>(*this, lib, "StructWithBitFields_get_field24",
             SideEffects::none, "{field.getter_name}");
@@ -130,8 +131,6 @@ public:
             SideEffects::none, "{field.getter_name}");
         addExtern<DAS_BIND_FUN(StructWithBitFields_set_field8)>(*this, lib, "StructWithBitFields_set_field8",
             SideEffects::modifyArgument, "{field.setter_name}");
-        
-        addAnnotation(make_smart<StructWithBitFieldsAnnotation>(lib));
     }
 };
 
