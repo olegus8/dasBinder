@@ -505,7 +505,7 @@ class C_Function(C_InnerNode):
     def generate_add(self):
         return [
             f'addExtern<DAS_BIND_FUN({self.name})>(*this, lib, "{self.name}",',
-             '    SideEffects::worstDefault, "{self.name}");',
+            f'    SideEffects::worstDefault, "{self.name}");',
         ]
 
 
