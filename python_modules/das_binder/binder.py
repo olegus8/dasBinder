@@ -209,6 +209,7 @@ class C_TranslationUnit(LoggingObject):
         self.__cached_enums = None
         self.__cached_structs = None
         self.__cached_opaque_structs = None
+        self.__cached_functions = None
 
     def __get_nodes(self, node_class, configure_fn):
         for inner in self.__root['inner']:
@@ -247,6 +248,14 @@ class C_TranslationUnit(LoggingObject):
                 configure_fn=self.__config.configure_opaque_struct
             ) if s.name not in regular_struct_names]
         return self.__cached_opaque_structs
+
+    @property
+    def functions(self):
+        if self.__cached_functions is None:
+            self.__cached_functions = list(self.__get_nodes(
+                node_class=C_Function,
+                configure_fn=self.__config.configure_function))
+        return self.__cached_functions
 
 
 class C_InnerNode(object):
@@ -474,6 +483,20 @@ class C_StructField(C_InnerNode):
     @property
     def getter_name(self):
         return f'{self.__struct.name}_get_{self.name}'
+
+
+class C_Function(C_InnerNode):
+
+    @staticmethod
+    def maybe_create(root, **kwargs):
+        if root['kind'] == 'RecordDecl':
+            return C_Function(root=root, **kwargs)
+
+    def generate_add(self):
+        return [
+            f'addExtern<DAS_BIND_FUN({self.name})>(*this, lib, "{self.name}",',
+             '    SideEffects::worstDefault, "{self.name}");',
+        ]
 
 
 def to_cpp_bool(b):
