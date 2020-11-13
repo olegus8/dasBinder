@@ -295,6 +295,11 @@ class C_InnerNode(object):
         return self.__root
 
     @property
+    def type(self):
+        t = self.root['type']
+        return t.get('desugaredQualType', t['qualType'])
+
+    @property
     def name(self):
         return self.root['name']
 
@@ -468,11 +473,6 @@ class C_StructField(C_InnerNode):
     @property
     def struct(self):
         return self.__struct
-
-    @property
-    def type(self):
-        t = self.root['type']
-        return t.get('desugaredQualType', t['qualType'])
 
     @property
     def is_array(self):
