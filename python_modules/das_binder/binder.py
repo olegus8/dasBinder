@@ -498,7 +498,7 @@ class C_Function(C_InnerNode):
 
     @staticmethod
     def maybe_create(root, **kwargs):
-        if root['kind'] == 'RecordDecl':
+        if root['kind'] == 'FunctionDecl':
             return C_Function(root=root, **kwargs)
 
     def generate_add(self):
