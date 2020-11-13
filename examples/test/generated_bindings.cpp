@@ -171,6 +171,11 @@ public:
             SideEffects::modifyArgument, "{field.setter_name}");
         addAnnotation(make_smart<StructWithCharsAnnotation>(lib));
         addAnnotation(make_smart<StructWithSizeTAnnotation>(lib));
+
+        //
+        // functions
+        //
+
     }
 };
 
