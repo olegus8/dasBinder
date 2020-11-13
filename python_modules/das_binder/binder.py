@@ -228,7 +228,8 @@ class C_TranslationUnit(LoggingObject):
                 if node is None or node.is_builtin:
                     continue
                 configure_fn(node)
-                yield node
+                if not node.is_ignored:
+                    yield node
 
     @property
     def root(self):
