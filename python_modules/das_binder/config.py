@@ -29,3 +29,7 @@ class ConfigBase(object):
     def configure_struct_field(self, field):
         '''This function is called for each field in each struct.'''
         pass
+
+    def configure_function(self, function):
+        '''This function is called for each function.'''
+        pass

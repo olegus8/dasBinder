@@ -187,6 +187,15 @@ class Binder(LoggingObject):
                         for line in struct.generate_add()
         ]
         lines += [
+            '',
+            '        //',
+            '        // functions',
+            '        //',
+            ''] + [
+           f'        {line}' for function in self.__c_header.functions
+                        for line in function.generate_add()
+        ]
+        lines += [
             '    }',
             '};',
             '',
