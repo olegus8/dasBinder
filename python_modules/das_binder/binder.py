@@ -433,11 +433,11 @@ class C_OpaqueStruct(C_InnerNode):
 
     def __init__(self, **kwargs):
         super(C_OpaqueStruct, self).__init__(**kwargs)
-        self.__type_name = None
+        self.__das_type = None
         self.__annotation_type = 'ManagedValueAnnotation'
 
-    def set_type_name(self, type_name):
-        self.__type_name = type_name
+    def set_das_type(self, das_type):
+        self.__das_type = das_type
 
     def set_annotation_type(self, annotation):
         self.__annotation_type = annotation
@@ -451,15 +451,18 @@ class C_OpaqueStruct(C_InnerNode):
         ):
             return C_OpaqueStruct(root=root, **kwargs)
 
+    @proprety
+    def das_type(self):
+        return self.__das_type or self.name
+
     def generate_decl(self):
-        type_name = self.__type_name or self.name
-        return [f'MAKE_TYPE_FACTORY({type_name}, {type_name})']
+        return [f'MAKE_TYPE_FACTORY({self.das_type}, {self.das_type})']
 
     def generate_add(self):
-        t = self.__type_name
+        t = self.das_type
         ann = self.__annotation_type
         return [
-            f'addAnnotation(make_smart<{ann}>("{t}", "{t}"));']
+            f'addAnnotation(make_smart<{ann}<{t}>("{t}", "{t}"));']
 
 
 class C_StructField(C_InnerNode):
