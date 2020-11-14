@@ -433,10 +433,14 @@ class C_OpaqueStruct(C_InnerNode):
 
     def __init__(self, **kwargs):
         super(C_OpaqueStruct, self).__init__(**kwargs)
-        self.__dummy_type = None
+        self.__type_name = None
+        self.__annotation_type = 'DummyTypeAnnotation'
 
-    def set_dummy_type(self, dummy_type):
-        self.__dummy_type = dummy_type
+    def set_type_name(self, type_name):
+        self.__type_name = type_name
+
+    def set_annotation_type(self, annotation):
+        self.__annotation_type = annotation
 
     @staticmethod
     def maybe_create(root, **kwargs):
@@ -448,13 +452,13 @@ class C_OpaqueStruct(C_InnerNode):
             return C_OpaqueStruct(root=root, **kwargs)
 
     def generate_decl(self):
-        dummy_type = self.__dummy_type or self.name
-        return [f'MAKE_TYPE_FACTORY({dummy_type}, {dummy_type})']
+        type_name = self.__type_name or self.name
+        return [f'MAKE_TYPE_FACTORY({type_name}, {type_name})']
 
     def generate_add(self):
-        dt = self.__dummy_type
+        dt = self.__type
         return [
-            f'addAnnotation(make_smart<DummyTypeAnnotation>("{dt}", "{dt}",',
+            f'addAnnotation(make_smart<{self.__annotation_type}>("{dt}", "{dt}",',
             f'    sizeof({dt}), alignof({dt})));']
 
 
