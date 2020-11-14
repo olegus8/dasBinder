@@ -456,10 +456,11 @@ class C_OpaqueStruct(C_InnerNode):
         return [f'MAKE_TYPE_FACTORY({type_name}, {type_name})']
 
     def generate_add(self):
-        dt = self.__type
+        t = self.__type_name
+        ann = self.__annotation_type
         return [
-            f'addAnnotation(make_smart<{self.__annotation_type}>("{dt}", "{dt}",',
-            f'    sizeof({dt}), alignof({dt})));']
+            f'addAnnotation(make_smart<{ann}>("{t}", "{t}",',
+            f'    sizeof({t}), alignof({t})));']
 
 
 class C_StructField(C_InnerNode):
