@@ -6,11 +6,6 @@ class ConfigBase(object):
         raise NotImplementedError()
 
     @property
-    def c_header_include(self):
-        '''C header for which to generate bindings, but in the form suitable for #include in generated das::Module cpp file.'''
-        raise NotImplementedError()
-
-    @property
     def save_ast(self):
         return False
 

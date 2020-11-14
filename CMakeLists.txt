@@ -40,7 +40,8 @@ IF(NOT DAS_BINDER_INCLUDED)
 
     SET(DAS_BINDER_TEST_SRC
         ${DAS_BINDER_DIR}/examples/test/main.cpp
-        ${DAS_BINDER_DIR}/examples/test/generated_bindings.cpp
+        ${DAS_BINDER_DIR}/examples/test/bindings_generated.inc
+        ${DAS_BINDER_DIR}/examples/test/bindings.cpp
     )
 
     add_executable(dasBinderTest ${DAS_BINDER_TEST_SRC})
@@ -49,7 +50,7 @@ IF(NOT DAS_BINDER_INCLUDED)
 
     DAS_BINDER(
         ${DAS_BINDER_DIR}/examples/test/header_to_bind.h
-        ${DAS_BINDER_DIR}/examples/test/generated_bindings.cpp
+        ${DAS_BINDER_DIR}/examples/test/bindings_generated.inc
         ${DAS_BINDER_DIR}/examples/test/binding_config.py
     )
 ENDIF()
