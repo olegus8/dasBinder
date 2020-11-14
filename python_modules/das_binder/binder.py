@@ -451,7 +451,7 @@ class C_OpaqueStruct(C_InnerNode):
         ):
             return C_OpaqueStruct(root=root, **kwargs)
 
-    @proprety
+    @property
     def das_type(self):
         return self.__das_type or self.name
 
