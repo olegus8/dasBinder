@@ -434,7 +434,7 @@ class C_OpaqueStruct(C_InnerNode):
     def __init__(self, **kwargs):
         super(C_OpaqueStruct, self).__init__(**kwargs)
         self.__type_name = None
-        self.__annotation_type = None
+        self.__annotation_type = 'ManagedValueAnnotation'
 
     def set_type_name(self, type_name):
         self.__type_name = type_name
