@@ -433,11 +433,15 @@ class C_OpaqueStruct(C_InnerNode):
 
     def __init__(self, **kwargs):
         super(C_OpaqueStruct, self).__init__(**kwargs)
-        self.__das_type = None
         self.__annotation_type = 'ManagedValueAnnotation'
+        self.__das_type = None
+        self.__ptr_type = None
 
     def set_das_type(self, das_type):
         self.__das_type = das_type
+
+    def define_ptr_type(self, ptr_type):
+        self.__ptr_type = ptr_type
 
     def set_annotation_type(self, annotation):
         self.__annotation_type = annotation
@@ -456,7 +460,15 @@ class C_OpaqueStruct(C_InnerNode):
         return self.__das_type or self.name
 
     def generate_decl(self):
-        return [f'MAKE_TYPE_FACTORY({self.das_type}, {self.das_type})']
+        lines = []
+        if self.__ptr_type is not None:
+            lines += [
+                f'typedef {self.name} * {self.__ptr_type};'
+            ]
+        lines += [
+            f'MAKE_TYPE_FACTORY({self.das_type}, {self.das_type})',
+        ]
+        return lines
 
     def generate_add(self):
         t = self.das_type
