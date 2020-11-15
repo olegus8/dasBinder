@@ -6,15 +6,6 @@ class ConfigBase(object):
         raise NotImplementedError()
 
     @property
-    def c_header_to_bind(self):
-        '''C header to bind stuff from.'''
-        raise NotImplementedError()
-
-    @property
-    def c_headers_to_extract_defines_from(self):
-        return []
-
-    @property
     def save_ast(self):
         return False
 
