@@ -319,10 +319,9 @@ class C_TranslationUnit(LoggingObject):
         return self.__cached_functions
 
 
-class C_InnerNode(object):
+class C_Item(object):
 
-    def __init__(self, root, config):
-        self.__root = root
+    def __init__(self, config):
         self.__ignored = False
         self.__config = config
 
@@ -342,6 +341,23 @@ class C_InnerNode(object):
         return self.name.startswith('_')
 
     @property
+    def name(self):
+        raise NotImplementedError()
+
+    def generate_decl(self):
+        return []
+
+    def generate_add(self):
+        return []
+
+
+class C_InnerNode(C_Item):
+
+    def __init__(self, root, **kwargs):
+        super(C_InnerNode, self).__init__(**kwargs)
+        self.__root = root
+
+    @property
     def root(self):
         return self.__root
 
@@ -349,16 +365,6 @@ class C_InnerNode(object):
     def type(self):
         t = self.root['type']
         return t.get('desugaredQualType', t['qualType'])
-
-    @property
-    def name(self):
-        return self.root['name']
-
-    def generate_decl(self):
-        return []
-
-    def generate_add(self):
-        return []
 
 
 class C_Enum(C_InnerNode):
@@ -607,12 +613,16 @@ class C_HeaderRaw(object):
         return self.__cached_macro_consts
 
 
-class C_MacroConst(object):
+class C_MacroConst(C_Item):
 
-    def __init__(self, name, value, config):
+    def __init__(self, name, value, **kwargs):
+        super(C_MacroConst, self).__init__(**kwargs)
         self.__name = name
-        self.__value = value
-        self.__config = config
+        self.value = value
+
+    @property
+    def name(self):
+        return self.__name
 
     @staticmethod
     def maybe_create(line, **kwargs):
