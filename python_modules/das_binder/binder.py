@@ -573,13 +573,44 @@ class C_HeaderRaw(object):
 
     def __init__(self, fpath, config):
         with open(fpath, 'r') as f:
-            self.__header_text = f.read()
+            self.__header_lines = [line for line in f]
         self.__config = config
+        self.__cached_defines = None
+
+    def __get_items(self, item_class, configure_fn):
+        for line in self.__header_lines:
+            with log_on_exception(line=line):
+                item = item_class.maybe_create(
+                    line=line, config=self.__config)
+                if item is None:
+                    continue
+                configure_fn(item)
+                if not item.is_ignored:
+                    yield item
 
     @property
     def defines(self):
-        #TODO
-        return []
+        if self.__cached_defines is None:
+            self.__cached_defines = self.__get_items(
+                item_class=C_Define,
+                configure_fn=self.__config.configure_define)
+        return self.__cached_defines
+
+
+class C_Define(object):
+
+    def __init__(self, name, value, config):
+        self.__name = name
+        self.__value = value
+        self.__config = config
+
+    @staticmethod
+    def maybe_create(line, **kwargs):
+        m = re.match(r'#define\s+([^\s(]+)\s+(\S+)$', line)
+        if m is None:
+            return
+        name, value = m.groups()
+        return C_Define(name=name, value=value, **kwargs)
 
 
 def to_cpp_bool(b):
