@@ -17,7 +17,7 @@ IF(NOT DAS_BINDER_INCLUDED)
     include(${DAS_BINDER_DIR}/dasShared/CMakeLists.txt)
     GET_DAS_SHARED_PY_SRC(DAS_BINDER_SHARED_SRC ${DAS_BINDER_DIR}/dasShared)
 
-    MACRO(DAS_BINDER c_header_from module_to config)
+    MACRO(DAS_BINDER c_header_from module_to config include_dirs)
         IF(NOT Python3_FOUND OR NOT CMAKE_C_COMPILER_ID MATCHES "Clang")
             MESSAGE(STATUS "Prerequisites for dasBinder not found. Will use pregenerated bindings in ${module_to} for ${c_header_from}.")
         ELSE()
@@ -31,7 +31,7 @@ IF(NOT DAS_BINDER_INCLUDED)
                     --module_to ${module_to}
                     --config ${config}
                     --clang_c_exe ${CMAKE_C_COMPILER}
-                    --include_dirs "${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES}"
+                    --include_dirs "${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES};${include_dirs}"
                     --include_dirs_sep ";"
                 COMMENT "Writing generated das bindings for ${c_header_from} to ${module_to}"
             )
