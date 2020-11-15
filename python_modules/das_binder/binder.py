@@ -71,11 +71,31 @@ class Binder(LoggingObject):
     def __init__(self, argv):
         self.__settings = Settings(argv=argv[1:])
         self.__config = self.__read_config(self.__settings.config_fpath)
-        self.__c_header = C_TranslationUnit(
+        self.__main_c_header = C_TranslationUnit(
             c_src_fpath=self.__settings.c_header_from,
             clang_c_exe=self.__settings.clang_c_exe,
             include_dirs=self.__settings.include_dirs,
             config=self.__config)
+
+    @property
+    def __enums(self):
+        return self.__main_c_header.enums
+
+    @property
+    def __structs(self):
+        return self.__main_c_header.structs
+
+    @property
+    def __opaque_structs(self):
+        return self.__main_c_header.opaque_structs
+
+    @property
+    def __functions(self):
+        return self.__main_c_header.functions
+
+    @property
+    def __ast(self):
+        return self.__main_c_header.root
 
     def run(self):
         logging.basicConfig(level=self.__settings.log_level,
@@ -93,7 +113,7 @@ class Binder(LoggingObject):
         if not self.__config.save_ast:
             return
         ast_fpath = self.__settings.module_to + '.ast.json'
-        write_to_file(fpath=ast_fpath, content=json.dumps(self.__c_header.root,
+        write_to_file(fpath=ast_fpath, content=json.dumps(self.__ast,
             indent=4, sort_keys=True))
         self._log_info(f'Wrote AST for C header to {ast_fpath}')
 
@@ -123,7 +143,7 @@ class Binder(LoggingObject):
             '// enums',
             '//',
             ''] + [
-            line for enum in self.__c_header.enums
+            line for enum in self.__enums
                 for line in enum.generate_decl()
         ]
         lines += [
@@ -132,7 +152,7 @@ class Binder(LoggingObject):
             '// opaque structs',
             '//',
             ''] + [
-            line for struct in self.__c_header.opaque_structs
+            line for struct in self.__opaque_structs
                 for line in struct.generate_decl()
         ]
         lines += [
@@ -141,7 +161,7 @@ class Binder(LoggingObject):
             '// structs',
             '//',
             ''] + [
-            line for struct in self.__c_header.structs
+            line for struct in self.__structs
                 for line in struct.generate_decl()
         ]
         lines += [
@@ -159,7 +179,7 @@ class Binder(LoggingObject):
             '        // enums',
             '        //',
             ''] + [
-           f'        {line}' for enum in self.__c_header.enums
+           f'        {line}' for enum in self.__enums
                         for line in enum.generate_add()
         ]
         lines += [
@@ -168,7 +188,7 @@ class Binder(LoggingObject):
             '        // opaque structs',
             '        //',
             ''] + [
-           f'        {line}' for struct in self.__c_header.opaque_structs
+           f'        {line}' for struct in self.__opaque_structs
                         for line in struct.generate_add()
         ]
         lines += [
@@ -177,7 +197,7 @@ class Binder(LoggingObject):
             '        // structs',
             '        //',
             ''] + [
-           f'        {line}' for struct in self.__c_header.structs
+           f'        {line}' for struct in self.__structs
                         for line in struct.generate_add()
         ]
         lines += [
@@ -186,7 +206,7 @@ class Binder(LoggingObject):
             '        // functions',
             '        //',
             ''] + [
-           f'        {line}' for function in self.__c_header.functions
+           f'        {line}' for function in self.__functions
                         for line in function.generate_add()
         ]
         lines += [
