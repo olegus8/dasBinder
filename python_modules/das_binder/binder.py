@@ -237,6 +237,15 @@ class Binder(LoggingObject):
                         for line in function.generate_add()
         ]
         lines += [
+            '',
+            '        //',
+            '        // macro constants',
+            '        //',
+            ''] + [
+           f'        {line}' for const in self.__macro_consts
+                        for line in const.generate_add()
+        ]
+        lines += [
             '    }',
             '};',
             '',
@@ -606,11 +615,16 @@ class C_MacroConst(object):
 
     @staticmethod
     def maybe_create(line, **kwargs):
-        m = re.match(r'#define\s+([^\s(]+)\s+(\S+)$', line)
+        m = re.match(r'#define\s+([^\s(]+)\s+(\S+.*)$', line)
         if m is None:
             return
         name, value = m.groups()
         return C_MacroConst(name=name, value=value, **kwargs)
+
+    def generate_add(self):
+        return [
+            f'addConstant(*this,"{self.__name}",{self.__value});'
+        ]
 
 
 def to_cpp_bool(b):
