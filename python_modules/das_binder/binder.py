@@ -76,6 +76,27 @@ class Binder(LoggingObject):
             clang_c_exe=self.__settings.clang_c_exe,
             include_dirs=self.__settings.include_dirs,
             config=self.__config)
+        self.__raw_c_headers = [C_HeaderRaw(fpath=fpath)
+            for fpath in self.__raw_c_headers_fpaths]
+
+    @property
+    def __raw_c_headers_fpaths(self):
+        for headers in [
+            self.__config.c_headers_to_extract_defines_from,
+        ]:
+            for header in headers:
+                if path.isabs(header):
+                    yield full_path(header)
+                else:
+                    for include_dir in self.__settings.include_dirs:
+                        full_header_fpath = full_path(path.join(
+                            include_dir, header))
+                        if path.exist(full_header_fpath):
+                            yield full_header_fpath
+                            break
+                    else:
+                        raise BinderError(f'Cannot find header {header} in '
+                            f'any of the include directories.')
 
     @property
     def __enums(self):
