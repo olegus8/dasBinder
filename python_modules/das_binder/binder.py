@@ -82,7 +82,7 @@ class Binder(LoggingObject):
     @property
     def __raw_c_headers_fpaths(self):
         for headers in [
-            self.__config.c_headers_to_extract_defines_from,
+            self.__config.c_headers_to_extract_macro_consts_from,
         ]:
             for header in headers:
                 if path.isabs(header):
@@ -99,10 +99,10 @@ class Binder(LoggingObject):
                             f'any of the include directories.')
 
     @property
-    def __defines(self):
+    def __macro_consts(self):
         for header in self.__raw_c_headers:
-            for define in header.defines:
-                yield define
+            for macro_const in header.macro_consts:
+                yield macro_const
 
     @property
     def __enums(self):
@@ -575,7 +575,7 @@ class C_HeaderRaw(object):
         with open(fpath, 'r') as f:
             self.__header_lines = [line for line in f]
         self.__config = config
-        self.__cached_defines = None
+        self.__cached_macro_consts = None
 
     def __get_items(self, item_class, configure_fn):
         for line in self.__header_lines:
@@ -589,15 +589,15 @@ class C_HeaderRaw(object):
                     yield item
 
     @property
-    def defines(self):
-        if self.__cached_defines is None:
-            self.__cached_defines = self.__get_items(
-                item_class=C_Define,
-                configure_fn=self.__config.configure_define)
-        return self.__cached_defines
+    def macro_consts(self):
+        if self.__cached_macro_consts is None:
+            self.__cached_macro_consts = self.__get_items(
+                item_class=C_MacroConst,
+                configure_fn=self.__config.configure_macro_const)
+        return self.__cached_macro_consts
 
 
-class C_Define(object):
+class C_MacroConst(object):
 
     def __init__(self, name, value, config):
         self.__name = name
@@ -610,7 +610,7 @@ class C_Define(object):
         if m is None:
             return
         name, value = m.groups()
-        return C_Define(name=name, value=value, **kwargs)
+        return C_MacroConst(name=name, value=value, **kwargs)
 
 
 def to_cpp_bool(b):
