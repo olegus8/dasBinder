@@ -76,7 +76,7 @@ class Binder(LoggingObject):
             clang_c_exe=self.__settings.clang_c_exe,
             include_dirs=self.__settings.include_dirs,
             config=self.__config)
-        self.__raw_c_headers = [C_HeaderRaw(fpath=fpath)
+        self.__raw_c_headers = [C_HeaderRaw(fpath=fpath, config=self.__config)
             for fpath in self.__raw_c_headers_fpaths]
 
     @property
@@ -84,7 +84,7 @@ class Binder(LoggingObject):
         for headers in [
             self.__config.c_headers_to_extract_defines_from,
         ]:
-            for header in headers:
+            for header in self.__config.raw_c_headers:
                 if path.isabs(header):
                     yield full_path(header)
                 else:
@@ -97,6 +97,12 @@ class Binder(LoggingObject):
                     else:
                         raise BinderError(f'Cannot find header {header} in '
                             f'any of the include directories.')
+
+    @property
+    def __defines(self):
+        for header in self.__raw_c_headers:
+            for define in header.defines:
+                yield define
 
     @property
     def __enums(self):
@@ -561,6 +567,13 @@ class C_Function(C_InnerNode):
             f'addExtern<DAS_BIND_FUN({self.name})>(*this, lib, "{self.name}",',
             f'    SideEffects::worstDefault, "{self.name}");',
         ]
+
+
+class C_HeaderRaw(object):
+
+    def __init__(self, fpath):
+        with open(fpath, 'r') as f:
+            self.__header_text = f.read()
 
 
 def to_cpp_bool(b):
