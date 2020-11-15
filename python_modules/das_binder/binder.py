@@ -571,9 +571,10 @@ class C_Function(C_InnerNode):
 
 class C_HeaderRaw(object):
 
-    def __init__(self, fpath):
+    def __init__(self, fpath, config):
         with open(fpath, 'r') as f:
             self.__header_text = f.read()
+        self.__config = config
 
     @property
     def defines(self):
