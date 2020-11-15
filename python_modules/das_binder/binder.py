@@ -365,6 +365,10 @@ class C_InnerNode(C_Item):
     def type(self):
         t = self.root['type']
         return t.get('desugaredQualType', t['qualType'])
+    
+    @property
+    def name(self):
+        return self.root['name']
 
 
 class C_Enum(C_InnerNode):
