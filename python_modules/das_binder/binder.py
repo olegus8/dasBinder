@@ -634,7 +634,7 @@ class C_MacroConst(C_Item):
 
     def generate_add(self):
         return [
-            f'addConstant(*this,"{self.__name}",{self.__value});'
+            f'addConstant(*this,"{self.name}",{self.value});'
         ]
 
 
