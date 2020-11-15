@@ -91,7 +91,7 @@ class Binder(LoggingObject):
                     for include_dir in self.__settings.include_dirs:
                         full_header_fpath = full_path(path.join(
                             include_dir, header))
-                        if path.exist(full_header_fpath):
+                        if path.exists(full_header_fpath):
                             yield full_header_fpath
                             break
                     else:
