@@ -575,6 +575,11 @@ class C_HeaderRaw(object):
         with open(fpath, 'r') as f:
             self.__header_text = f.read()
 
+    @property
+    def defines(self):
+        #TODO
+        return []
+
 
 def to_cpp_bool(b):
     return {True: 'true', False: 'false'}[b]
