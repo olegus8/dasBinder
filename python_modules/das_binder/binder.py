@@ -84,7 +84,7 @@ class Binder(LoggingObject):
         for headers in [
             self.__config.c_headers_to_extract_defines_from,
         ]:
-            for header in self.__config.raw_c_headers:
+            for header in headers:
                 if path.isabs(header):
                     yield full_path(header)
                 else:
