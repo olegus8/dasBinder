@@ -48,9 +48,12 @@ IF(NOT DAS_BINDER_INCLUDED)
     TARGET_LINK_LIBRARIES(dasBinderTest libDaScript)
     SETUP_CPP11(dasBinderTest)
 
+    get_target_property(DAS_BINDER_TEST_INCLUDE_DIRS dasBinderTest INCLUDE_DIRECTORIES)
+
     DAS_BINDER(
         ${DAS_BINDER_DIR}/examples/test/header_to_bind.h
         ${DAS_BINDER_DIR}/examples/test/bindings_generated.inc
         ${DAS_BINDER_DIR}/examples/test/binding_config.py
+        ${DAS_BINDER_TEST_INCLUDE_DIRS}
     )
 ENDIF()
