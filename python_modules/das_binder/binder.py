@@ -634,6 +634,7 @@ class C_MacroConst(C_Item):
         if m is None:
             return
         name, value = m.groups()
+        value = re.sub(r'//.*$', '', value)
         return C_MacroConst(name=name, value=value, **kwargs)
 
     def generate_add(self):
