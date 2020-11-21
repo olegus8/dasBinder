@@ -462,10 +462,10 @@ class C_Struct(C_InnerNode):
            f'struct {self.name}Annotation',
            f': public ManagedStructureAnnotation<{self.name},true,true> {{',
            f'    {self.name}Annotation(ModuleLibrary & ml)',
-           f'    : ManagedStructureAnnotation ("{self.name}", ml) {{',
+           f'    : ManagedStructureAnnotation ("{self.das_name}", ml) {{',
         ]
         lines += [
-           f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.name}");'
+           f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.das_name}");'
                         for f in self.fields
                         if not f.is_bit_field and not f.is_self_ref
         ]
@@ -474,7 +474,7 @@ class C_Struct(C_InnerNode):
             '    void init() {',
         ]
         lines += [
-           f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.name}");'
+           f'        addField<DAS_BIND_MANAGED_FIELD({f.name})>("{f.das_name}");'
                         for f in self.fields if f.is_self_ref
         ]
         lines += [
