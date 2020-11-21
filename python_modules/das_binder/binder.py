@@ -7,6 +7,7 @@ from os import path
 from das_shared.object_base import LoggingObject
 from das_shared.op_sys import full_path, run_exec, write_to_file
 from das_shared.diag import log_on_exception
+from das_keywords import DAS_KEYWORDS
 
 
 APP_NAME = 'dasBinder'
