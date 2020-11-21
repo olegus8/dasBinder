@@ -371,6 +371,13 @@ class C_InnerNode(C_Item):
     def name(self):
         return self.root['name']
 
+    @property
+    def das_name(self):
+        name = self.name
+        if name in DAS_KEYWORDS:
+            name += '_'
+        return name
+
 
 class C_Enum(C_InnerNode):
 
