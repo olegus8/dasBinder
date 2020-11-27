@@ -597,6 +597,12 @@ class C_StructField(C_InnerNode):
 
 class C_Function(C_InnerNode):
 
+    def __init__(self):
+        self.__side_effects = 'worstDefault'
+
+    def set_side_effects(self, side_effects):
+        self.__side_effects = side_effects
+
     @staticmethod
     def maybe_create(root, **kwargs):
         if root['kind'] == 'FunctionDecl':
@@ -605,7 +611,7 @@ class C_Function(C_InnerNode):
     def generate_add(self):
         return [
             f'addExtern<DAS_BIND_FUN({self.name})>(*this, lib, "{self.name}",',
-            f'    SideEffects::worstDefault, "{self.name}");',
+            f'    SideEffects::{self.__side_effects}, "{self.name}");',
         ]
 
 
