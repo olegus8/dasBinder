@@ -411,6 +411,7 @@ class C_Struct(C_InnerNode):
         self.__is_local = True
         self.__can_copy = True
         self.__can_move = True
+        self.__can_clone = True
 
     def set_is_local(self, is_local):
         self.__is_local = is_local
@@ -419,6 +420,9 @@ class C_Struct(C_InnerNode):
         self.__can_copy = can_copy
 
     def set_can_move(self, can_move):
+        self.__can_move = can_move
+
+    def set_can_clone(self, can_move):
         self.__can_move = can_move
 
     @staticmethod
@@ -444,6 +448,7 @@ class C_Struct(C_InnerNode):
         is_local = to_cpp_bool(self.__is_local)
         can_copy = to_cpp_bool(self.__can_copy)
         can_move = to_cpp_bool(self.__can_move)
+        can_clone = to_cpp_bool(self.__can_clone)
         lines = []
         lines += [
             '',
@@ -482,6 +487,7 @@ class C_Struct(C_InnerNode):
            f'    virtual bool isLocal() const override {{ return {is_local}; }}',
            f'    virtual bool canCopy() const override {{ return {can_copy}; }}',
            f'    virtual bool canMove() const override {{ return {can_move}; }}',
+           f'    virtual bool canClone() const override {{ return {can_clone}; }}',
             '};'
         ]
         return lines
