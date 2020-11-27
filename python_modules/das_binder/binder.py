@@ -489,7 +489,7 @@ class C_Struct(C_InnerNode):
            f'    virtual bool canMove() const override {{ return {can_move}; }}',
            f'    virtual bool canClone() const override {{ return {can_clone}; }}',
             '    virtual SimNode * simulateCopy ( Context & context, const LineInfo & at, SimNode * l, SimNode * r ) const override {',
-            '        return context.code->makeNode<SimNode_Set<OT>>(at, l, r);',            
+           f'        return context.code->makeNode<SimNode_Set<{self.name}>>(at, l, r);',            
             '    }',
             '    virtual SimNode * simulateClone ( Context & context, const LineInfo & at, SimNode * l, SimNode * r ) const override {',
             '        return simulateCopy(context, at, l, r);',
