@@ -597,7 +597,8 @@ class C_StructField(C_InnerNode):
 
 class C_Function(C_InnerNode):
 
-    def __init__(self):
+    def __init__(self, **kwargs):
+        super(C_Function, self).__init__(**kwargs)
         self.__side_effects = 'worstDefault'
 
     def set_side_effects(self, side_effects):
