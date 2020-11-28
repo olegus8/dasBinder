@@ -147,13 +147,16 @@ class Binder(LoggingObject):
         self._log_info(f'Wrote AST for C header to {ast_fpath}')
 
     def __read_config(self, config_fpath):
-        cfg_globals = {}
         try:
             with open(config_fpath, 'r') as f:
                 cfg_py = f.read()
         except IOError:
             raise BinderError(f'Could not read config file: {config_fpath}')
+        old_path = list(sys.path)
+        sys.path.insert(0, path.dirname(config_fpath))
+        cfg_globals = {}
         exec(cfg_py, cfg_globals)
+        sys.path = old_path
         config_class = cfg_globals.get('Config')
         if config_class is None:
             raise BinderError(f'Config file must define "Config" class.')
