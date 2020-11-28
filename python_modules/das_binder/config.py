@@ -9,6 +9,13 @@ class ConfigBase(object):
     def c_headers_to_extract_defines_from(self):
         return []
 
+    def generate_custom_files(self, context):
+        '''Return tuples of file path and contents.
+        File paths must be relative. They will be resolved relative
+        to the directory containing config file.
+        '''
+        return []
+
     @property
     def save_ast(self):
         return False
