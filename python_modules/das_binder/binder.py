@@ -278,21 +278,12 @@ class CustomPassContext(LoggingObject):
         self.functions = dict((x.name, x)
             for x in self.__main_c_header.functions)
 
-    @property
-    def __enums(self):
-        return self.__main_c_header.enums
-
-    @property
-    def __structs(self):
-        return self.__main_c_header.structs
-
-    @property
-    def __opaque_structs(self):
-        return self.__main_c_header.opaque_structs
-
-    @property
-    def __functions(self):
-        return self.__main_c_header.functions
+    def write_to_file(self, fpath, content):
+        if path.isabs(fpath):
+            raise BinderError(f'File path must be relative: {fpath}')
+        fpath = path.realpath(path.join(self.__root_path, fpath))
+        self._log_info(f'Writing to file: {fpath}')
+        write_to_file(fpath=fpath, content=content)
 
 
 class C_TranslationUnit(LoggingObject):
