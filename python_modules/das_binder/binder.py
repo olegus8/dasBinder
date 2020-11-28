@@ -136,6 +136,11 @@ class Binder(LoggingObject):
             content='\n'.join(self.__generate_module() + ['']))
         self._log_info(f'Wrote generated das::Module to '
             f'{self.__settings.module_to}')
+        self._log_info('Running custom pass.')
+        self.__config.custom_pass(CustomPassContext(
+            root_path = path.dirname(self.__settings.config_fpath),
+            main_c_header = self.__main_c_header,
+        ))
         self._log_info('Finished successfully.')
 
     def __maybe_save_ast(self):
@@ -257,6 +262,12 @@ class Binder(LoggingObject):
             f'REGISTER_MODULE(Module_{module});',
         ]
         return lines
+
+
+class CustomPassContext(LoggingObject):
+
+    def __init__(self, binder):
+        self.__binder = binder
 
 
 class C_TranslationUnit(LoggingObject):
