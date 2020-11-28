@@ -266,8 +266,9 @@ class Binder(LoggingObject):
 
 class CustomPassContext(LoggingObject):
 
-    def __init__(self, binder):
-        self.__binder = binder
+    def __init__(self, root_path, main_c_header):
+        self.__root_path = root_path
+        self.__main_c_header = main_c_header
 
 
 class C_TranslationUnit(LoggingObject):
