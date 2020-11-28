@@ -269,6 +269,30 @@ class CustomPassContext(LoggingObject):
     def __init__(self, root_path, main_c_header):
         self.__root_path = root_path
         self.__main_c_header = main_c_header
+        self.enums = dict((x.name, x)
+            for x in self.__main_c_header.enums)
+        self.structs = dict((x.name, x)
+            for x in self.__main_c_header.structs)
+        self.opaque_structs = dict((x.name, x)
+            for x in self.__main_c_header.opaqua_structs)
+        self.functions = dict((x.name, x)
+            for x in self.__main_c_header.functions)
+
+    @property
+    def __enums(self):
+        return self.__main_c_header.enums
+
+    @property
+    def __structs(self):
+        return self.__main_c_header.structs
+
+    @property
+    def __opaque_structs(self):
+        return self.__main_c_header.opaque_structs
+
+    @property
+    def __functions(self):
+        return self.__main_c_header.functions
 
 
 class C_TranslationUnit(LoggingObject):
