@@ -274,7 +274,7 @@ class CustomPassContext(LoggingObject):
         self.structs = dict((x.name, x)
             for x in self.__main_c_header.structs)
         self.opaque_structs = dict((x.name, x)
-            for x in self.__main_c_header.opaqua_structs)
+            for x in self.__main_c_header.opaque_structs)
         self.functions = dict((x.name, x)
             for x in self.__main_c_header.functions)
 
