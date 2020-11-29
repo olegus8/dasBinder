@@ -268,15 +268,7 @@ class CustomPassContext(LoggingObject):
 
     def __init__(self, root_path, main_c_header):
         self.__root_path = root_path
-        self.__main_c_header = main_c_header
-        self.enums = dict((x.das_name, x)
-            for x in self.__main_c_header.enums)
-        self.structs = dict((x.das_name, x)
-            for x in self.__main_c_header.structs)
-        self.opaque_structs = dict((x.das_name, x)
-            for x in self.__main_c_header.opaque_structs)
-        self.functions = dict((x.das_name, x)
-            for x in self.__main_c_header.functions)
+        self.main_c_header = main_c_header
 
     def write_to_file(self, fpath, content):
         if path.isabs(fpath):
