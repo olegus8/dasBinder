@@ -637,6 +637,25 @@ class C_Function(C_InnerNode):
             f'    SideEffects::{self.__side_effects}, "{self.name}");',
         ]
 
+    @property
+    def params(self):
+        for inner in self.root['inner']:
+            if inner['kind'] == 'ParmVarDecl':
+                param = C_FunctionParam(root=inner, config=self.config,
+                    function=self)
+                yield param
+
+
+class C_FunctionParam(C_InnerNode):
+
+    def __init__(self, function, **kwargs):
+        super(C_FunctionParam, self).__init__(**kwargs)
+        self.__function = function
+
+    @property
+    def function(self):
+        return self.__function
+
 
 class C_HeaderRaw(object):
 
