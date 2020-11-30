@@ -48,6 +48,10 @@ def assert_starts_with(s, prefix):
     if not s.startswith(prefix):
         raise AssertionError('"{}" must start with "{}"'.format(s, prefix))
 
+def assert_ends_with(s, suffix):
+    if not s.endswith(suffix):
+        raise AssertionError('"{}" must end with "{}"'.format(s, suffix))
+
 def assert_not_in(x, container):
     if x in container:
         raise AssertionError('{} is not in {}'.format(
