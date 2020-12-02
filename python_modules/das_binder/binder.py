@@ -138,7 +138,6 @@ class Binder(LoggingObject):
             f'{self.__settings.module_to}')
         self._log_info('Running custom pass.')
         self.__config.custom_pass(CustomPassContext(
-            root_path = path.dirname(self.__settings.config_fpath),
             main_c_header = self.__main_c_header,
         ))
         self._log_info('Finished successfully.')
@@ -266,16 +265,8 @@ class Binder(LoggingObject):
 
 class CustomPassContext(LoggingObject):
 
-    def __init__(self, root_path, main_c_header):
-        self.__root_path = root_path
+    def __init__(self, main_c_header):
         self.main_c_header = main_c_header
-
-    def write_to_file(self, fpath, content):
-        if path.isabs(fpath):
-            raise BinderError(f'File path must be relative: {fpath}')
-        fpath = path.realpath(path.join(self.__root_path, fpath))
-        self._log_info(f'Writing to file: {fpath}')
-        write_to_file(fpath=fpath, content=content)
 
 
 class C_TranslationUnit(LoggingObject):
