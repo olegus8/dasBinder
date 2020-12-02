@@ -263,7 +263,7 @@ class Binder(LoggingObject):
         return lines
 
 
-class CustomPassContext(LoggingObject):
+class CustomPassContext(object):
 
     def __init__(self, main_c_header):
         self.main_c_header = main_c_header
