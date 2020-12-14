@@ -419,12 +419,13 @@ class C_Enum(C_InnerNode):
 
 class C_Struct(C_InnerNode):
 
-    def __init__(self, **kwargs):
+    def __init__(self, tag, **kwargs):
         super(C_Struct, self).__init__(**kwargs)
         self.__is_local = True
         self.__can_copy = True
         self.__can_move = True
         self.__can_clone = True
+        self.__tag = tag
 
     def set_is_local(self, is_local):
         self.__is_local = is_local
@@ -445,7 +446,15 @@ class C_Struct(C_InnerNode):
             and 'inner' in root
             and 'name' in root
         ):
-            return C_Struct(root=root, **kwargs)
+            return C_Struct(root=root, tag=root['tagUsed'], **kwargs)
+
+    @property
+    def is_union(self):
+        return self.__tag == 'union'
+
+    @property
+    def is_struct(self):
+        return self.__tag == 'struct'
 
     @property
     def fields(self):
