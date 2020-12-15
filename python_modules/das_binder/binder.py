@@ -136,6 +136,10 @@ class Binder(LoggingObject):
             content='\n'.join(self.__generate_module() + ['']))
         self._log_info(f'Wrote generated das::Module to '
             f'{self.__settings.module_to}')
+        self._log_info('Running custom pass.')
+        self.__config.custom_pass(CustomPassContext(
+            main_c_header = self.__main_c_header,
+        ))
         self._log_info('Finished successfully.')
 
     def __maybe_save_ast(self):
@@ -147,13 +151,16 @@ class Binder(LoggingObject):
         self._log_info(f'Wrote AST for C header to {ast_fpath}')
 
     def __read_config(self, config_fpath):
-        cfg_globals = {}
         try:
             with open(config_fpath, 'r') as f:
                 cfg_py = f.read()
         except IOError:
             raise BinderError(f'Could not read config file: {config_fpath}')
+        old_path = list(sys.path)
+        sys.path.insert(0, path.dirname(config_fpath))
+        cfg_globals = {}
         exec(cfg_py, cfg_globals)
+        sys.path = old_path
         config_class = cfg_globals.get('Config')
         if config_class is None:
             raise BinderError(f'Config file must define "Config" class.')
@@ -254,6 +261,12 @@ class Binder(LoggingObject):
             f'REGISTER_MODULE(Module_{module});',
         ]
         return lines
+
+
+class CustomPassContext(object):
+
+    def __init__(self, main_c_header):
+        self.main_c_header = main_c_header
 
 
 class C_TranslationUnit(LoggingObject):
@@ -406,11 +419,13 @@ class C_Enum(C_InnerNode):
 
 class C_Struct(C_InnerNode):
 
-    def __init__(self, **kwargs):
+    def __init__(self, tag, **kwargs):
         super(C_Struct, self).__init__(**kwargs)
         self.__is_local = True
         self.__can_copy = True
         self.__can_move = True
+        self.__can_clone = True
+        self.__tag = tag
 
     def set_is_local(self, is_local):
         self.__is_local = is_local
@@ -421,6 +436,9 @@ class C_Struct(C_InnerNode):
     def set_can_move(self, can_move):
         self.__can_move = can_move
 
+    def set_can_clone(self, can_move):
+        self.__can_move = can_move
+
     @staticmethod
     def maybe_create(root, **kwargs):
         if (root['kind'] == 'RecordDecl'
@@ -428,7 +446,15 @@ class C_Struct(C_InnerNode):
             and 'inner' in root
             and 'name' in root
         ):
-            return C_Struct(root=root, **kwargs)
+            return C_Struct(root=root, tag=root['tagUsed'], **kwargs)
+
+    @property
+    def is_union(self):
+        return self.__tag == 'union'
+
+    @property
+    def is_struct(self):
+        return self.__tag == 'struct'
 
     @property
     def fields(self):
@@ -444,6 +470,7 @@ class C_Struct(C_InnerNode):
         is_local = to_cpp_bool(self.__is_local)
         can_copy = to_cpp_bool(self.__can_copy)
         can_move = to_cpp_bool(self.__can_move)
+        can_clone = to_cpp_bool(self.__can_clone)
         lines = []
         lines += [
             '',
@@ -482,6 +509,13 @@ class C_Struct(C_InnerNode):
            f'    virtual bool isLocal() const override {{ return {is_local}; }}',
            f'    virtual bool canCopy() const override {{ return {can_copy}; }}',
            f'    virtual bool canMove() const override {{ return {can_move}; }}',
+           f'    virtual bool canClone() const override {{ return {can_clone}; }}',
+            '    virtual SimNode * simulateCopy ( Context & context, const LineInfo & at, SimNode * l, SimNode * r ) const override {',
+           f'        return context.code->makeNode<SimNode_CopyRefValue>(at, l, r, getSizeOf());',
+            '    }',
+            '    virtual SimNode * simulateClone ( Context & context, const LineInfo & at, SimNode * l, SimNode * r ) const override {',
+            '        return simulateCopy(context, at, l, r);',
+            '    }',
             '};'
         ]
         return lines
@@ -585,6 +619,13 @@ class C_StructField(C_InnerNode):
 
 class C_Function(C_InnerNode):
 
+    def __init__(self, **kwargs):
+        super(C_Function, self).__init__(**kwargs)
+        self.__side_effects = 'worstDefault'
+
+    def set_side_effects(self, side_effects):
+        self.__side_effects = side_effects
+
     @staticmethod
     def maybe_create(root, **kwargs):
         if root['kind'] == 'FunctionDecl':
@@ -593,8 +634,27 @@ class C_Function(C_InnerNode):
     def generate_add(self):
         return [
             f'addExtern<DAS_BIND_FUN({self.name})>(*this, lib, "{self.name}",',
-            f'    SideEffects::worstDefault, "{self.name}");',
+            f'    SideEffects::{self.__side_effects}, "{self.name}");',
         ]
+
+    @property
+    def params(self):
+        for inner in self.root['inner']:
+            if inner['kind'] == 'ParmVarDecl':
+                param = C_FunctionParam(root=inner, config=self.config,
+                    function=self)
+                yield param
+
+
+class C_FunctionParam(C_InnerNode):
+
+    def __init__(self, function, **kwargs):
+        super(C_FunctionParam, self).__init__(**kwargs)
+        self.__function = function
+
+    @property
+    def function(self):
+        return self.__function
 
 
 class C_HeaderRaw(object):

@@ -9,6 +9,10 @@ class ConfigBase(object):
     def c_headers_to_extract_defines_from(self):
         return []
 
+    def custom_pass(self, context):
+        '''Can generate extra files here.'''
+        pass
+
     @property
     def save_ast(self):
         return False
