@@ -202,9 +202,9 @@ class Binder(LoggingObject):
         ]
         lines += [
             '',
-           f'class Module_{module} : public Module {{',
+           f'class GeneratedModule_{module} : public Module {{',
             'public:',
-           f'    Module_{module}() : Module("{module}") {{',
+           f'    GeneratedModule_{module}() : Module("{module}") {{',
             '        ModuleLibrary lib;',
             '        lib.addModule(this);',
             '        lib.addBuiltInModule();'
@@ -257,8 +257,6 @@ class Binder(LoggingObject):
         lines += [
             '    }',
             '};',
-            '',
-            f'REGISTER_MODULE(Module_{module});',
         ]
         return lines
 
