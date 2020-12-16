@@ -208,7 +208,7 @@ class Binder(LoggingObject):
             '    }',
             '',
             'protected:',
-            '    void add_generated(ModuleLibrary & lib) {',
+            '    void addGenerated(ModuleLibrary & lib) {',
         ]
         lines += [
             '',
