@@ -205,9 +205,10 @@ class Binder(LoggingObject):
            f'class GeneratedModule_{module} : public Module {{',
             'public:',
            f'    GeneratedModule_{module}() : Module("{module}") {{',
-            '        ModuleLibrary lib;',
-            '        lib.addModule(this);',
-            '        lib.addBuiltInModule();'
+            '    }',
+            '',
+            'protected:',
+            '    void add_generated(ModuleLibrary & lib) {',
         ]
         lines += [
             '',
