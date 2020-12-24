@@ -14,6 +14,10 @@ class ConfigBase(object):
         pass
 
     @property
+    def title(self):
+        return None
+
+    @property
     def save_ast(self):
         return False
 
