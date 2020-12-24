@@ -417,8 +417,17 @@ class C_Enum(C_InnerNode):
         lines += [f'DAS_BASE_BIND_ENUM({self.name}, {self.name}']
         lines += [f',   {f}' for f in self.fields]
         lines += [')']
-'''
-'''
+        lines += [
+           f'namespace das',
+           f'{{',
+           f'    template <>',
+           f'    struct typeFactory< {name} > {{',
+           f'        static TypeDeclPtr make(const ModuleLibrary & library ){',
+           f'            return library.makeEnumType("{name}");',
+           f'        }}',
+           f'    }}',
+           f'}}',
+        ]
         return lines
 
     def generate_add(self):
