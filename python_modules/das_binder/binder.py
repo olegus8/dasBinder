@@ -139,6 +139,7 @@ class Binder(LoggingObject):
         self._log_info('Running custom pass.')
         self.__config.custom_pass(CustomPassContext(
             main_c_header = self.__main_c_header,
+            macro_consts = self.__macro_consts,
         ))
         self._log_info('Finished successfully.')
 
@@ -264,8 +265,9 @@ class Binder(LoggingObject):
 
 class CustomPassContext(object):
 
-    def __init__(self, main_c_header):
+    def __init__(self, main_c_header, macro_consts):
         self.main_c_header = main_c_header
+        self.macro_consts = macro_consts
 
 
 class C_TranslationUnit(LoggingObject):
