@@ -413,11 +413,32 @@ class C_Enum(C_InnerNode):
            f'    template <> struct cast < {name} > '
                         f': cast_enum < {name} > {{}};',
            f'}};',
+            '',
+           f'class Enumeration{name} : public das::Enumeration {{',
+           f'public:',
+           f'    Enumeration{name}() : das::Enumeration("{name}") {{',
+           f'        external = true;',
+           f'        cppName = "{name}";',
+           f'        baseType = (das::Type) das::ToBasicType< '
+                        f'das::underlying_type< {name} >::type >::type;',
+           f'        {name} enumArray[] = {{'] + [
+           f'            {name}::{f},' for f in self.fields
         ]
-        lines += [f'DAS_BASE_BIND_ENUM({self.name}, {self.name}']
-        lines += [f',   {f}' for f in self.fields]
-        lines += [')']
+        remove_last_char(lines, ',')
         lines += [
+           f'        }};',
+           f'        static const char *enumArrayName[] = {{'] + [
+           f'            "{f}",' for f in self.fiends
+        ]
+        remove_last_char(lines, ',')
+        lines += [
+           f'        }};',
+           f'        for (uint32_t i = 0; i < {len(self.fields)}; ++i)',
+           f'            addI(enumArrayName[i], int64_t(enumArray[i]), '
+                                f'das::LineInfo());',
+           f'    }}',
+           f'}};',
+            '',
            f'namespace das',
            f'{{',
            f'    template <>',
@@ -730,3 +751,7 @@ class C_MacroConst(C_Item):
 
 def to_cpp_bool(b):
     return {True: 'true', False: 'false'}[b]
+
+def remove_last_char(lines, char):
+    if lines[-1].endswith(char):
+        lines[-1] = lines[-1][:-1]
