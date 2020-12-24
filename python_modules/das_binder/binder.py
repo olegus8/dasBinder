@@ -443,7 +443,7 @@ class C_Enum(C_InnerNode):
            f'{{',
            f'    template <>',
            f'    struct typeFactory< {name} > {{',
-           f'        static TypeDeclPtr make(const ModuleLibrary & library ){',
+           f'        static TypeDeclPtr make(const ModuleLibrary & library){{',
            f'            return library.makeEnumType("{name}");',
            f'        }}',
            f'    }}',
