@@ -405,11 +405,51 @@ class C_Enum(C_InnerNode):
                 yield inner['name']
 
     def generate_decl(self):
+        name = self.name
+        fields = list(self.fields)
         lines = []
-        lines += [f'DAS_BIND_ENUM_CAST({self.name});']
-        lines += [f'DAS_BASE_BIND_ENUM({self.name}, {self.name}']
-        lines += [f',   {f}' for f in self.fields]
-        lines += [')']
+        lines += [
+           f'namespace das',
+           f'{{',
+           f'    template <> struct cast < {name} > '
+                        f': cast_enum < {name} > {{}};',
+           f'}};',
+            '',
+           f'class Enumeration{name} : public das::Enumeration {{',
+           f'public:',
+           f'    Enumeration{name}() : das::Enumeration("{name}") {{',
+           f'        external = true;',
+           f'        cppName = "{name}";',
+           f'        baseType = (das::Type) das::ToBasicType< '
+                        f'das::underlying_type< {name} >::type >::type;',
+           f'        {name} enumArray[] = {{'] + [
+           f'            {name}::{f},' for f in fields
+        ]
+        remove_last_char(lines, ',')
+        lines += [
+           f'        }};',
+           f'        static const char *enumArrayName[] = {{'] + [
+           f'            "{f}",' for f in fields
+        ]
+        remove_last_char(lines, ',')
+        lines += [
+           f'        }};',
+           f'        for (uint32_t i = 0; i < {len(fields)}; ++i)',
+           f'            addI(enumArrayName[i], int64_t(enumArray[i]), '
+                                f'das::LineInfo());',
+           f'    }}',
+           f'}};',
+            '',
+           f'namespace das',
+           f'{{',
+           f'    template <>',
+           f'    struct typeFactory< {name} > {{',
+           f'        static TypeDeclPtr make(const ModuleLibrary & library){{',
+           f'            return library.makeEnumType("{name}");',
+           f'        }}',
+           f'    }};',
+           f'}}',
+        ]
         return lines
 
     def generate_add(self):
@@ -712,3 +752,7 @@ class C_MacroConst(C_Item):
 
 def to_cpp_bool(b):
     return {True: 'true', False: 'false'}[b]
+
+def remove_last_char(lines, char):
+    if lines[-1].endswith(char):
+        lines[-1] = lines[-1][:-1]
