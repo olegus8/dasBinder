@@ -447,7 +447,7 @@ class C_Enum(C_InnerNode):
            f'        static TypeDeclPtr make(const ModuleLibrary & library){{',
            f'            return library.makeEnumType("{name}");',
            f'        }}',
-           f'    }}',
+           f'    }};',
            f'}}',
         ]
         return lines
