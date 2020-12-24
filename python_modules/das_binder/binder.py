@@ -405,11 +405,20 @@ class C_Enum(C_InnerNode):
                 yield inner['name']
 
     def generate_decl(self):
+        name = self.name
         lines = []
-        lines += [f'DAS_BIND_ENUM_CAST({self.name});']
+        lines += [
+           f'namespace das',
+           f'{{',
+           f'    template <> struct cast < {name} > '
+                        f': cast_enum < {name} > {{}};',
+           f'}};',
+        ]
         lines += [f'DAS_BASE_BIND_ENUM({self.name}, {self.name}']
         lines += [f',   {f}' for f in self.fields]
         lines += [')']
+'''
+'''
         return lines
 
     def generate_add(self):
