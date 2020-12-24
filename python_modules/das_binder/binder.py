@@ -428,7 +428,7 @@ class C_Enum(C_InnerNode):
         lines += [
            f'        }};',
            f'        static const char *enumArrayName[] = {{'] + [
-           f'            "{f}",' for f in self.fiends
+           f'            "{f}",' for f in self.fields
         ]
         remove_last_char(lines, ',')
         lines += [
