@@ -730,9 +730,9 @@ class C_HeaderRaw(object):
     @property
     def macro_consts(self):
         if self.__cached_macro_consts is None:
-            self.__cached_macro_consts = self.__get_items(
+            self.__cached_macro_consts = list(self.__get_items(
                 item_class=C_MacroConst,
-                configure_fn=self.__config.configure_macro_const)
+                configure_fn=self.__config.configure_macro_const))
         return self.__cached_macro_consts
 
 
