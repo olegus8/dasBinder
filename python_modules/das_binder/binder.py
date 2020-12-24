@@ -272,9 +272,19 @@ class C_TranslationUnit(LoggingObject):
 
     def __init__(self, c_src_fpath, clang_c_exe, include_dirs, config):
         cmd = []
-        cmd += [clang_c_exe, '-cc1', '-ast-dump=json']
+        cmd += [clang_c_exe, '-c',
+            '-fno-delayed-template-parsing',
+            '-fno-color-diagnostics',
+        ]
         for dpath in include_dirs:
-            cmd += [f'-I{dpath}']
+            dpath = dpath.strip()
+            if dpath:
+                cmd += [f'-I{dpath}']
+        cmd += [
+            '-Xclang',
+            '-ast-dump=json',
+        ]
+
         cmd += [c_src_fpath]
         out, err, exit_code = run_exec(cmd)
         self.__root = json.loads(out)
