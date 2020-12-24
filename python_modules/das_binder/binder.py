@@ -406,6 +406,7 @@ class C_Enum(C_InnerNode):
 
     def generate_decl(self):
         name = self.name
+        fields = list(self.fields)
         lines = []
         lines += [
            f'namespace das',
@@ -422,18 +423,18 @@ class C_Enum(C_InnerNode):
            f'        baseType = (das::Type) das::ToBasicType< '
                         f'das::underlying_type< {name} >::type >::type;',
            f'        {name} enumArray[] = {{'] + [
-           f'            {name}::{f},' for f in self.fields
+           f'            {name}::{f},' for f in fields
         ]
         remove_last_char(lines, ',')
         lines += [
            f'        }};',
            f'        static const char *enumArrayName[] = {{'] + [
-           f'            "{f}",' for f in self.fields
+           f'            "{f}",' for f in fields
         ]
         remove_last_char(lines, ',')
         lines += [
            f'        }};',
-           f'        for (uint32_t i = 0; i < {len(self.fields)}; ++i)',
+           f'        for (uint32_t i = 0; i < {len(fields)}; ++i)',
            f'            addI(enumArrayName[i], int64_t(enumArray[i]), '
                                 f'das::LineInfo());',
            f'    }}',
