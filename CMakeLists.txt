@@ -3,7 +3,7 @@ IF(NOT DAS_BINDER_INCLUDED)
     MESSAGE(STATUS "dasBinder module included.")
 
     find_package(Python3)
-    find_package(Clang)
+    find_package(clang)
 
     SET(DAS_BINDER_DIR ${CMAKE_SOURCE_DIR}/modules/dasBinder)
     SET(DAS_BINDER_PY_DIR ${DAS_BINDER_DIR}/python_modules/das_binder)
@@ -21,7 +21,7 @@ IF(NOT DAS_BINDER_INCLUDED)
     MACRO(DAS_BINDER c_header_from module_to config include_dirs extra_deps)
         IF(NOT Python3_FOUND)
             MESSAGE(STATUS "Python3 prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_to} for ${c_header_from}.")
-        ELSEIF(NOT Clang_FOUND)
+        ELSEIF(NOT clang_FOUND)
             MESSAGE(STATUS "Clang prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_to} for ${c_header_from}.")
         ELSE()
             ADD_CUSTOM_COMMAND(
