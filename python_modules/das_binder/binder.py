@@ -693,6 +693,10 @@ class C_Function(C_InnerNode):
                     function=self)
                 yield param
 
+    @property
+    def return_type(self):
+        return re.match(r'^([^(]+) \(.*', self.type).group(1).strip()
+
 
 class C_FunctionParam(C_InnerNode):
 
