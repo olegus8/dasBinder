@@ -186,6 +186,25 @@ class Binder(LoggingObject):
             line for enum in self.__enums
                 for line in enum.generate_decl_h()
         ]
+        lines += [
+            '',
+            '//',
+            '// opaque structs',
+            '//',
+            ''] + [
+            line for struct in self.__opaque_structs
+                for line in struct.generate_decl_h()
+        ]
+        lines += [
+            '',
+            '//',
+            '// structs',
+            '//',
+            ''] + [
+            line for struct in self.__structs
+                for line in struct.generate_decl_h()
+        ]
+        return lines
 
     def __generate_module_cpp(self):
         lines = []
