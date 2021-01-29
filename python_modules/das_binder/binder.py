@@ -646,14 +646,21 @@ class C_OpaqueStruct(C_InnerNode):
     def das_type(self):
         return self.__das_type or self.name
 
-    def generate_decl_cpp(self):
+    def generate_decl_h(self):
         lines = []
         if self.__ptr_type is not None:
             lines += [
                 f'typedef {self.name} * {self.__ptr_type};'
             ]
         lines += [
-            f'MAKE_TYPE_FACTORY({self.das_type}, {self.das_type})',
+            f'MAKE_EXTERNAL_TYPE_FACTORY({self.das_type}, {self.das_type})',
+        ]
+        return lines
+
+    def generate_decl_cpp(self):
+        lines = []
+        lines += [
+            f'IMPLEMENT_EXTERNAL_TYPE_FACTORY({self.das_type}, {self.das_type})',
         ]
         return lines
 
