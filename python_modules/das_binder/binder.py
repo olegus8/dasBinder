@@ -28,8 +28,10 @@ class Settings(object):
             description='Generates das::Module binding stuff from .h file.')
         parser.add_argument('--c_header_from', type=str, required=True,
             help='.h file to generate bindings from.')
-        parser.add_argument('--module_to', type=str, required=True,
+        parser.add_argument('--module_cpp_to', type=str, required=True,
             help='.cpp file to write generated das::Module to.')
+        parser.add_argument('--module_h_to', type=str, required=True,
+            help='.h file to write generated das header to.')
         parser.add_argument('--clang_c_exe', type=str, default='clang',
             help='Clang C compiler to use. Default: %(default)s')
         parser.add_argument('--include_dirs', type=str,
@@ -48,8 +50,12 @@ class Settings(object):
         return getattr(logging, self.__args.log_level.upper())
 
     @property
-    def module_to(self):
-        return full_path(self.__args.module_to)
+    def module_cpp_to(self):
+        return full_path(self.__args.module_cpp_to)
+
+    @property
+    def module_h_to(self):
+        return full_path(self.__args.module_h_to)
 
     @property
     def c_header_from(self):
@@ -137,16 +143,16 @@ class Binder(LoggingObject):
             main_c_header = self.__main_c_header,
             macro_consts = self.__macro_consts,
         ))
-        write_to_file(fpath=self.__settings.module_to,
+        write_to_file(fpath=self.__settings.module_cpp_to,
             content='\n'.join(self.__generate_module() + ['']))
         self._log_info(f'Wrote generated das::Module to '
-            f'{self.__settings.module_to}')
+            f'{self.__settings.module_cpp_to}')
         self._log_info('Finished successfully.')
 
     def __maybe_save_ast(self):
         if not self.__config.save_ast:
             return
-        ast_fpath = self.__settings.module_to + '.ast.json'
+        ast_fpath = self.__settings.module_cpp_to + '.ast.json'
         write_to_file(fpath=ast_fpath, content=json.dumps(self.__ast,
             indent=4, sort_keys=True))
         self._log_info(f'Wrote AST for C header to {ast_fpath}')
