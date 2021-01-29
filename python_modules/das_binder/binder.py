@@ -544,6 +544,9 @@ class C_Struct(C_InnerNode):
                 if not field.is_ignored:
                     yield field
 
+    def generate_decl_h(self):
+        return [f'MAKE_EXTERNAL_TYPE_FACTORY({self.name}, {self.name});']
+
     def generate_decl_cpp(self):
         is_local = to_cpp_bool(self.__is_local)
         can_copy = to_cpp_bool(self.__can_copy)
@@ -552,7 +555,7 @@ class C_Struct(C_InnerNode):
         lines = []
         lines += [
             '',
-           f'MAKE_TYPE_FACTORY({self.name}, {self.name});',
+           f'IMPLEMENT_EXTERNAL_TYPE_FACTORY({self.name}, {self.name});',
         ]
         for field in self.fields:
             if not field.is_bit_field:
