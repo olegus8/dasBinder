@@ -18,32 +18,34 @@ IF(NOT DAS_BINDER_INCLUDED)
     include(${DAS_BINDER_DIR}/dasShared/CMakeLists.txt)
     GET_DAS_SHARED_PY_SRC(DAS_BINDER_SHARED_SRC ${DAS_BINDER_DIR}/dasShared)
 
-    MACRO(DAS_BINDER c_header_from module_to config include_dirs extra_deps)
+    MACRO(DAS_BINDER c_header_from module_cpp_to module_h_to config include_dirs extra_deps extra_outputs)
         IF(NOT Python3_FOUND)
-            MESSAGE(STATUS "Python3 prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_to} for ${c_header_from}.")
+            MESSAGE(STATUS "Python3 prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_h_to} and ${module_cpp_to} for ${c_header_from}.")
         ELSEIF(NOT DAS_BINDER_CLANG_EXE)
-            MESSAGE(STATUS "Clang prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_to} for ${c_header_from}.")
+            MESSAGE(STATUS "Clang prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_h_to} and ${module_cpp_to} for ${c_header_from}.")
         ELSE()
             ADD_CUSTOM_COMMAND(
                 DEPENDS ${c_header_from} ${config} ${extra_deps} ${DAS_BINDER_SRC} ${DAS_BINDER_SHARED_SRC}
-                OUTPUT ${module_to}
+                OUTPUT ${module_cpp_to} ${module_h_to} ${extra_outputs}
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                 VERBATIM
                 COMMAND ${Python3_EXECUTABLE} -B ${DAS_BINDER_PY_DIR}/main.py
                     --c_header_from ${c_header_from}
-                    --module_to ${module_to}
+                    --module_cpp_to ${module_cpp_to}
+                    --module_h_to ${module_h_to}
                     --config ${config}
                     --clang_c_exe ${DAS_BINDER_CLANG_EXE}
                     --include_dirs "${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES};${include_dirs}"
                     --include_dirs_sep ";"
-                COMMENT "Writing generated das bindings for ${c_header_from} to ${module_to}"
+                COMMENT "Writing generated das bindings for ${c_header_from} to ${module_h_to} and ${module_cpp_to}"
             )
         ENDIF()
     ENDMACRO()
 
     SET(DAS_BINDER_TEST_SRC
         ${DAS_BINDER_DIR}/examples/test/bindings.cpp
-        ${DAS_BINDER_DIR}/examples/test/bindings_generated.inc
+        ${DAS_BINDER_DIR}/examples/test/bindings_generated.h.inc
+        ${DAS_BINDER_DIR}/examples/test/bindings_generated.cpp.inc
         ${DAS_BINDER_DIR}/examples/test/main.cpp
     )
 
@@ -55,9 +57,11 @@ IF(NOT DAS_BINDER_INCLUDED)
 
     DAS_BINDER(
         ${DAS_BINDER_DIR}/examples/test/header_to_bind.h
-        ${DAS_BINDER_DIR}/examples/test/bindings_generated.inc
+        ${DAS_BINDER_DIR}/examples/test/bindings_generated.h.inc
+        ${DAS_BINDER_DIR}/examples/test/bindings_generated.cpp.inc
         ${DAS_BINDER_DIR}/examples/test/binding_config.py
         ${DAS_BINDER_TEST_INCLUDE_DIRS}
+        ""
         ""
     )
 ENDIF()
