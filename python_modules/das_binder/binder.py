@@ -661,11 +661,9 @@ class C_OpaqueStruct(C_InnerNode):
         return lines
 
     def generate_decl_cpp(self):
-        lines = []
-        lines += [
+        return [
             f'IMPLEMENT_EXTERNAL_TYPE_FACTORY({self.das_type}, {self.das_type})',
         ]
-        return lines
 
     def generate_add(self):
         t = self.das_type
