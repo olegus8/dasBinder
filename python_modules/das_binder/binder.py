@@ -147,6 +147,10 @@ class Binder(LoggingObject):
             content='\n'.join(self.__generate_module_cpp() + ['']))
         self._log_info(f'Wrote generated das::Module to '
             f'{self.__settings.module_cpp_to}')
+        write_to_file(fpath=self.__settings.module_h_to,
+            content='\n'.join(self.__generate_module_h() + ['']))
+        self._log_info(f'Wrote generated header to '
+            f'{self.__settings.module_h_to}')
         self._log_info('Finished successfully.')
 
     def __maybe_save_ast(self):
