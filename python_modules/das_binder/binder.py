@@ -838,10 +838,14 @@ def remove_last_char(lines, char):
 
 def split_to_parts(xs, parts):
     '''
-    >>> a = 'asdfzxcvlkjhqwer'
+    >>> a = 'some string to split'
     >>> split_to_parts(a, 10)
-    ['foo']
+    ['so', 'me', ' s', 'tr', 'in', 'g ', 'to', ' s', 'pl', 'it']
+    >>> for parts in [1, 10, 50]:
+    ...     aa = split_to_parts(a, parts)
+    ...     assert len(aa), parts
+    ...     assert ''.join(aa) == a
     '''
-    return [xs[(len(xs)* n  ) // parts :
-               (len(xs)*(n+1) // parts
+    return [xs[(len(xs)* n   ) // parts :
+               (len(xs)*(n+1)) // parts
     ] for n in range(parts) ]
