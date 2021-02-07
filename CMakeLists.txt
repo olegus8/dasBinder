@@ -38,7 +38,7 @@ IF(NOT DAS_BINDER_INCLUDED)
             ENDFOREACH()
             ADD_CUSTOM_COMMAND(
                 DEPENDS ${c_header_from} ${config} ${extra_deps} ${DAS_BINDER_SRC} ${DAS_BINDER_SHARED_SRC}
-                OUTPUT ${module_cpp_parts_var} ${module_h_to} ${extra_outputs}
+                OUTPUT ${module_cpp_prefix}.inc ${module_cpp_parts_var} ${module_h_to} ${extra_outputs}
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                 VERBATIM
                 COMMAND ${Python3_EXECUTABLE} -B ${DAS_BINDER_PY_DIR}/main.py

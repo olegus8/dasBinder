@@ -228,7 +228,11 @@ class Binder(LoggingObject):
         ]
         return lines
 
-    def __generate_module_cpp(self, part_i):
+    def __generate_module_inc(self):
+        lines = []
+        return lines
+
+    def __generate_module_cpp_part(self, part_i):
         lines = []
         module = self.__config.das_module_name
         header = path.rel_path(
