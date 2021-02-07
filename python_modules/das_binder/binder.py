@@ -28,8 +28,12 @@ class Settings(object):
             description='Generates das::Module binding stuff from .h file.')
         parser.add_argument('--c_header_from', type=str, required=True,
             help='.h file to generate bindings from.')
-        parser.add_argument('--module_cpp_to', type=str, required=True,
-            help='.cpp file to write generated das::Module to.')
+        parser.add_argument('--num_parts', type=int, required=True,
+            help='Number of compilation units to split generated bindings '
+                'into.')
+        parser.add_argument('--module_cpp_prefix', type=str, required=True,
+            help='Prefix for .cpp files to write generated das::Module '
+                'parts to.')
         parser.add_argument('--module_h_to', type=str, required=True,
             help='.h file to write generated das header to.')
         parser.add_argument('--clang_c_exe', type=str, default='clang',
