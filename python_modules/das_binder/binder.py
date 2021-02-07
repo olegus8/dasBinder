@@ -246,7 +246,7 @@ class Binder(LoggingObject):
             '// opaque structs',
             '//',
             ''] + [
-            line for struct in self.__opaque_structs
+            line for struct in part_of(self.__opaque_structs)
                 for line in struct.generate_decl_cpp()
         ]
         lines += [
@@ -255,7 +255,7 @@ class Binder(LoggingObject):
             '// structs',
             '//',
             ''] + [
-            line for struct in self.__structs
+            line for struct in part_of(self.__structs)
                 for line in struct.generate_decl_cpp()
         ]
         lines += [
@@ -274,7 +274,7 @@ class Binder(LoggingObject):
             '        // enums',
             '        //',
             ''] + [
-           f'        {line}' for enum in self.__enums
+           f'        {line}' for enum in part_of(self.__enums)
                         for line in enum.generate_add()
         ]
         lines += [
@@ -283,7 +283,7 @@ class Binder(LoggingObject):
             '        // opaque structs',
             '        //',
             ''] + [
-           f'        {line}' for struct in self.__opaque_structs
+           f'        {line}' for struct in part_of(self.__opaque_structs)
                         for line in struct.generate_add()
         ]
         lines += [
@@ -292,7 +292,7 @@ class Binder(LoggingObject):
             '        // structs',
             '        //',
             ''] + [
-           f'        {line}' for struct in self.__structs
+           f'        {line}' for struct in part_of(self.__structs)
                         for line in struct.generate_add()
         ]
         lines += [
@@ -301,7 +301,7 @@ class Binder(LoggingObject):
             '        // functions',
             '        //',
             ''] + [
-           f'        {line}' for function in self.__functions
+           f'        {line}' for function in part_of(self.__functions)
                         for line in function.generate_add()
         ]
         lines += [
@@ -310,7 +310,7 @@ class Binder(LoggingObject):
             '        // macro constants',
             '        //',
             ''] + [
-           f'        {line}' for const in self.__macro_consts
+           f'        {line}' for const in part_of(self.__macro_consts)
                         for line in const.generate_add()
         ]
         lines += [
