@@ -252,7 +252,7 @@ class Binder(LoggingObject):
             '',
             'protected:',
             '    void addGenerated(ModuleLibrary & lib) {'] + [
-           f'        addVulkanGenerated_{part}'
+           f'        addVulkanGenerated_{part}(*this, lib);'
                      for part in self.settings.num_parts] + [
             '    }',
             '};',
