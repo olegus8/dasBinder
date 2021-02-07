@@ -19,10 +19,10 @@ IF(NOT DAS_BINDER_INCLUDED)
     GET_DAS_SHARED_PY_SRC(DAS_BINDER_SHARED_SRC ${DAS_BINDER_DIR}/dasShared)
 
     MACRO(DAS_BINDER
-        c_header_from
         num_parts
-        module_cpp_prefix
         module_cpp_parts_var
+        c_header_from
+        module_cpp_prefix
         module_h_to config
         include_dirs
         extra_deps
