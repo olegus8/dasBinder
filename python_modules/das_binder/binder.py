@@ -292,51 +292,50 @@ class Binder(LoggingObject):
         ]
         lines += [
             '',
-            '        //',
-            '        // enums',
-            '        //',
+            '    //',
+            '    // enums',
+            '    //',
             ''] + [
-           f'        {line}' for enum in part_of(self.__enums)
-                        for line in enum.generate_add()
+           f'    {line}' for enum in part_of(self.__enums)
+                 for line in enum.generate_add()
         ]
         lines += [
             '',
-            '        //',
-            '        // opaque structs',
-            '        //',
+            '    //',
+            '    // opaque structs',
+            '    //',
             ''] + [
-           f'        {line}' for struct in part_of(self.__opaque_structs)
-                        for line in struct.generate_add()
+           f'    {line}' for struct in part_of(self.__opaque_structs)
+                 for line in struct.generate_add()
         ]
         lines += [
             '',
-            '        //',
-            '        // structs',
-            '        //',
+            '    //',
+            '    // structs',
+            '    //',
             ''] + [
-           f'        {line}' for struct in part_of(self.__structs)
-                        for line in struct.generate_add()
+           f'    {line}' for struct in part_of(self.__structs)
+                 for line in struct.generate_add()
         ]
         lines += [
             '',
-            '        //',
-            '        // functions',
-            '        //',
+            '    //',
+            '    // functions',
+            '    //',
             ''] + [
-           f'        {line}' for function in part_of(self.__functions)
-                        for line in function.generate_add()
+           f'    {line}' for function in part_of(self.__functions)
+                 for line in function.generate_add()
         ]
         lines += [
             '',
-            '        //',
-            '        // macro constants',
-            '        //',
+            '    //',
+            '    // macro constants',
+            '    //',
             ''] + [
-           f'        {line}' for const in part_of(self.__macro_consts)
-                        for line in const.generate_add()
+           f'    {line}' for const in part_of(self.__macro_consts)
+                 for line in const.generate_add()
         ]
         lines += [
-            '    }',
             '};',
         ]
         return lines
