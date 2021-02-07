@@ -140,6 +140,10 @@ class Binder(LoggingObject):
     def __ast(self):
         return self.__main_c_header.root
 
+    @property
+    def __generated_inc_path(self):
+        return f'{self.__settings.module_cpp_prefix}.inc'
+
     def run(self):
         logging.basicConfig(level=self.__settings.log_level,
             format='%(asctime)s [%(levelname)s:%(name)s] %(message)s')
@@ -151,11 +155,15 @@ class Binder(LoggingObject):
             main_c_header = self.__main_c_header,
             macro_consts = self.__macro_consts,
         ))
+        write_to_file(fpath=self.__generated_inc_path
+            content='\n'.join(self.__generate_module_cpp_inc() + ['']))
+        self._log_info(f'Wrote generated das::Module to '
+            f'{self.__generated_inc_path}')
         for part in self.__settings.num_parts:
             fpath = f'{self.__settings.module_cpp_prefix}_{part}.cpp'
             write_to_file(fpath=fpath,
                 content='\n'.join(self.__generate_module_cpp(part)+['']))
-            self._log_info(f'Wrote generated das::Module to {fpath}')
+            self._log_info(f'Wrote generated part to {fpath}')
         write_to_file(fpath=self.__settings.module_h_to,
             content='\n'.join(self.__generate_module_h() + ['']))
         self._log_info(f'Wrote generated header to '
