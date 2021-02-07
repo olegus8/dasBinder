@@ -238,6 +238,13 @@ class Binder(LoggingObject):
         lines += [
            f'#include "{header}"',
             '',
+        ]
+        for part in self.settings.num_parts:
+            lines += [
+               f'void addVulkanGenerated_{part}(Module &, ModuleLibrary &);'
+            ]
+        lines += [
+            '',
            f'class GeneratedModule_{module} : public Module {{',
             'public:',
            f'    GeneratedModule_{module}() : Module("{module}") {{',
@@ -245,7 +252,7 @@ class Binder(LoggingObject):
             '',
             'protected:',
             '    void addGenerated(ModuleLibrary & lib) {'] + [
-           f'        addGenerated_{part}'
+           f'        addVulkanGenerated_{part}'
                      for part in self.settings.num_parts] + [
             '    }',
             '};',
