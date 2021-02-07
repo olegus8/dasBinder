@@ -835,3 +835,13 @@ def to_cpp_bool(b):
 def remove_last_char(lines, char):
     if lines[-1].endswith(char):
         lines[-1] = lines[-1][:-1]
+
+def split_to_parts(xs, parts):
+    '''
+    >>> a = 'asdfzxcvlkjhqwer'
+    >>> split_to_parts(a, 10)
+    ['foo']
+    '''
+    return [xs[(len(xs)* n  ) // parts :
+               (len(xs)*(n+1) // parts
+    ] for n in range(parts) ]
