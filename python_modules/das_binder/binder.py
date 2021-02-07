@@ -151,10 +151,11 @@ class Binder(LoggingObject):
             main_c_header = self.__main_c_header,
             macro_consts = self.__macro_consts,
         ))
-        write_to_file(fpath=self.__settings.module_cpp_to,
-            content='\n'.join(self.__generate_module_cpp() + ['']))
-        self._log_info(f'Wrote generated das::Module to '
-            f'{self.__settings.module_cpp_to}')
+        for part in self.__settings.num_parts:
+            fpath = f'{self.__settings.module_cpp_prefix}_{part}.cpp'
+            write_to_file(fpath=fpath,
+                content='\n'.join(self.__generate_module_cpp(part)+['']))
+            self._log_info(f'Wrote generated das::Module to {fpath}')
         write_to_file(fpath=self.__settings.module_h_to,
             content='\n'.join(self.__generate_module_h() + ['']))
         self._log_info(f'Wrote generated header to '
@@ -164,7 +165,7 @@ class Binder(LoggingObject):
     def __maybe_save_ast(self):
         if not self.__config.save_ast:
             return
-        ast_fpath = self.__settings.module_cpp_to + '.ast.json'
+        ast_fpath = self.__settings.module_cpp_prefix + '.ast.json'
         write_to_file(fpath=ast_fpath, content=json.dumps(self.__ast,
             indent=4, sort_keys=True))
         self._log_info(f'Wrote AST for C header to {ast_fpath}')
