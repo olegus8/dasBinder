@@ -54,8 +54,12 @@ class Settings(object):
         return getattr(logging, self.__args.log_level.upper())
 
     @property
-    def module_cpp_to(self):
-        return full_path(self.__args.module_cpp_to)
+    def module_cpp_prefix(self):
+        return full_path(self.__args.module_cpp_prefix)
+
+    @property
+    def num_parts(self):
+        return self.__args.num_parts
 
     @property
     def module_h_to(self):
