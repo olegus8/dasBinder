@@ -35,13 +35,15 @@ IF(NOT DAS_BINDER_INCLUDED)
         ELSE()
             FOREACH(part_i ${num_parts})
                 LIST(APPEND ${module_cpp_parts_var} "${module_cpp_prefix}${part_i}.cpp")
+            ENDFOREACH()
             ADD_CUSTOM_COMMAND(
                 DEPENDS ${c_header_from} ${config} ${extra_deps} ${DAS_BINDER_SRC} ${DAS_BINDER_SHARED_SRC}
-                OUTPUT ${module_cpp_prefix} ${module_h_to} ${extra_outputs}
+                OUTPUT ${module_cpp_parts_var} ${module_h_to} ${extra_outputs}
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                 VERBATIM
                 COMMAND ${Python3_EXECUTABLE} -B ${DAS_BINDER_PY_DIR}/main.py
                     --c_header_from ${c_header_from}
+                    --num_parts ${num_parts}
                     --module_cpp_prefix ${module_cpp_prefix}
                     --module_h_to ${module_h_to}
                     --config ${config}
