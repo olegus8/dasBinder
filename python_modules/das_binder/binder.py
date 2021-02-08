@@ -553,7 +553,8 @@ class C_Enum(C_InnerNode):
         return lines
 
     def generate_add(self):
-        return [f'addEnumeration(make_smart<Enumeration{self.name}>());']
+        return [
+            f'module.addEnumeration(make_smart<Enumeration{self.name}>());']
 
 
 class C_Struct(C_InnerNode):
