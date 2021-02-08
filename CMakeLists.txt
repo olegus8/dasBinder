@@ -23,7 +23,8 @@ IF(NOT DAS_BINDER_INCLUDED)
         module_cpp_parts_var
         module_cpp_prefix
     )
-        FOREACH(part_i RANGE ${num_parts})
+        FOREACH(part_i_plus_one RANGE 1 ${num_parts})
+            MATH(EXPR part_i "${part_i_plus_one}-1")
             LIST(APPEND ${module_cpp_parts_var} "${module_cpp_prefix}_${part_i}.cpp")
         ENDFOREACH()
     ENDMACRO()
