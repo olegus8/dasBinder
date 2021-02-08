@@ -159,7 +159,7 @@ class Binder(LoggingObject):
             content='\n'.join(self.__generate_module_cpp_inc() + ['']))
         self._log_info(f'Wrote generated das::Module to '
             f'{self.__generated_inc_path}')
-        for part in self.__settings.num_parts:
+        for part in range(self.__settings.num_parts):
             fpath = f'{self.__settings.module_cpp_prefix}_{part}.cpp'
             write_to_file(fpath=fpath,
                 content='\n'.join(self.__generate_module_cpp(part)+['']))
@@ -243,7 +243,7 @@ class Binder(LoggingObject):
         lines += [
             '',
         ]
-        for part in self.__settings.num_parts:
+        for part in range(self.__settings.num_parts):
             lines += [
                f'void addVulkanGenerated_{part}(Module &, ModuleLibrary &);'
             ]
@@ -257,7 +257,7 @@ class Binder(LoggingObject):
             'protected:',
             '    void addGenerated(ModuleLibrary & lib) {'] + [
            f'        addVulkanGenerated_{part}(*this, lib);'
-                     for part in self.__settings.num_parts] + [
+                     for part in range(self.__settings.num_parts)] + [
             '    }',
             '};',
         ]
