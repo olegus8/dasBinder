@@ -266,7 +266,7 @@ class Binder(LoggingObject):
     def __generate_module_cpp(self, part_i):
         lines = []
         module = self.__config.das_module_name
-        header = path.rel_path(
+        header = path.relpath(
             self.__settings.module_h_to,
             path.dirname(self.__settings.module_cpp_prefix))
         part_of = lambda xs: split_to_parts(
