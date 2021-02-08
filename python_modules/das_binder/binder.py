@@ -155,7 +155,7 @@ class Binder(LoggingObject):
             main_c_header = self.__main_c_header,
             macro_consts = self.__macro_consts,
         ))
-        write_to_file(fpath=self.__generated_inc_path
+        write_to_file(fpath=self.__generated_inc_path,
             content='\n'.join(self.__generate_module_cpp_inc() + ['']))
         self._log_info(f'Wrote generated das::Module to '
             f'{self.__generated_inc_path}')
