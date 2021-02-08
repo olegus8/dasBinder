@@ -33,35 +33,38 @@ IF(NOT DAS_BINDER_INCLUDED)
         num_parts
         c_header_from
         module_cpp_prefix
-        module_h_to config
+        module_h_inc_to
+        module_h
+        config
         include_dirs
         extra_deps
         extra_outputs
     )
         IF(NOT Python3_FOUND)
-            MESSAGE(STATUS "Python3 prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_h_to} and ${module_cpp_prefix} for ${c_header_from}.")
+            MESSAGE(STATUS "Python3 prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_h_inc_to} and ${module_cpp_prefix} for ${c_header_from}.")
         ELSEIF(NOT DAS_BINDER_CLANG_EXE)
-            MESSAGE(STATUS "Clang prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_h_to} and ${module_cpp_prefix} for ${c_header_from}.")
+            MESSAGE(STATUS "Clang prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_h_inc_to} and ${module_cpp_prefix} for ${c_header_from}.")
         ELSE()
             SET(parts_cpp)
             DAS_BINDER_GET_GENERATED_CPP(
                 ${num_parts} parts_cpp ${module_cpp_prefix}
             )
             ADD_CUSTOM_COMMAND(
-                DEPENDS ${c_header_from} ${config} ${extra_deps} ${DAS_BINDER_SRC} ${DAS_BINDER_SHARED_SRC}
-                OUTPUT ${module_cpp_prefix}.inc ${parts_cpp} ${module_h_to} ${extra_outputs}
+                DEPENDS ${c_header_from} ${module_h} ${config} ${extra_deps} ${DAS_BINDER_SRC} ${DAS_BINDER_SHARED_SRC}
+                OUTPUT ${module_cpp_prefix}.inc ${parts_cpp} ${module_h_inc_to} ${extra_outputs}
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                 VERBATIM
                 COMMAND ${Python3_EXECUTABLE} -B ${DAS_BINDER_PY_DIR}/main.py
                     --c_header_from ${c_header_from}
                     --num_parts ${num_parts}
                     --module_cpp_prefix ${module_cpp_prefix}
-                    --module_h_to ${module_h_to}
+                    --module_h_inc_to ${module_h_inc_to}
+                    --module_h ${module_h_inc_to}
                     --config ${config}
                     --clang_c_exe ${DAS_BINDER_CLANG_EXE}
                     --include_dirs "${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES};${include_dirs}"
                     --include_dirs_sep ";"
-                COMMENT "Writing generated das bindings for ${c_header_from} to ${module_h_to} and ${module_cpp_prefix}"
+                COMMENT "Writing generated das bindings for ${c_header_from} to ${module_h_inc_to} and ${module_cpp_prefix}"
             )
         ENDIF()
     ENDMACRO()
