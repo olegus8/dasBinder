@@ -298,7 +298,7 @@ class Binder(LoggingObject):
         lines += [
             '',
            f'void addVulkanGenerated_{part_i}('
-                'Module & module, ModuleLibrary & lib);'
+                'Module & module, ModuleLibrary & lib)'
         ]
         lines += [
             '',
