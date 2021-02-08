@@ -731,7 +731,7 @@ class C_OpaqueStruct(C_InnerNode):
         t = self.das_type
         ann = self.__annotation_type
         return [
-            f'addAnnotation(make_smart<{ann}<{t}>>("{t}", "{t}"));']
+            f'module.addAnnotation(make_smart<{ann}<{t}>>("{t}", "{t}"));']
 
 
 class C_StructField(C_InnerNode):
