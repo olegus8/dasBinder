@@ -243,10 +243,9 @@ class Binder(LoggingObject):
         lines += [
             '',
         ]
+        kinds = ['Enums', 'OpaqueStructs', 'Structs', 'Functions', 'Consts']
         for part in range(self.__settings.num_parts):
-            for kind in [
-                'Enums', 'OpaqueStructs', 'Structs', 'Functions', 'Consts',
-            ]:
+            for kind in kinds:
                 lines += [f'void addVulkanGenerated{kind}_{part}'
                     '(Module &, ModuleLibrary &);'
                 ]
@@ -259,7 +258,8 @@ class Binder(LoggingObject):
             '',
             'protected:',
             '    void addGenerated(ModuleLibrary & lib) {'] + [
-           f'        addVulkanGenerated_{part}(*this, lib);'
+           f'        addVulkanGenerated{kind}_{part}(*this, lib);'
+                     for kind in kinds
                      for part in range(self.__settings.num_parts)] + [
             '    }',
             '};',
