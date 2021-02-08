@@ -33,7 +33,7 @@ IF(NOT DAS_BINDER_INCLUDED)
         ELSEIF(NOT DAS_BINDER_CLANG_EXE)
             MESSAGE(STATUS "Clang prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_h_to} and ${module_cpp_prefix} for ${c_header_from}.")
         ELSE()
-            FOREACH(part_i ${num_parts})
+            FOREACH(part_i RANGE ${num_parts})
                 LIST(APPEND ${module_cpp_parts_var} "${module_cpp_prefix}_${part_i}.cpp")
             ENDFOREACH()
             ADD_CUSTOM_COMMAND(
