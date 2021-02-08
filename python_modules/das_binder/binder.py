@@ -300,35 +300,27 @@ class Binder(LoggingObject):
         ]
         lines += [
             '',
-           f'void addVulkanGenerated_{part_i}('
-                'Module & module, ModuleLibrary & lib) {'
-        ]
-        lines += [
-            '',
-            '    //',
-            '    // enums',
-            '    //',
-            ''] + [
+           f'void addVulkanGeneratedEnums_{part_i}('
+                'Module & module, ModuleLibrary & lib) {'] + [
            f'    {line}' for enum in part_of(self.__enums)
-                 for line in enum.generate_add()
+                 for line in enum.generate_add()] + [
+            '}',
         ]
         lines += [
             '',
-            '    //',
-            '    // opaque structs',
-            '    //',
-            ''] + [
+           f'void addVulkanGeneratedOpaqueStructs_{part_i}('
+                'Module & module, ModuleLibrary & lib) {'] + [
            f'    {line}' for struct in part_of(self.__opaque_structs)
-                 for line in struct.generate_add()
+                 for line in struct.generate_add()] + [
+            '}',
         ]
         lines += [
             '',
-            '    //',
-            '    // structs',
-            '    //',
-            ''] + [
+           f'void addVulkanGeneratedStructs_{part_i}('
+                'Module & module, ModuleLibrary & lib) {'] + [
            f'    {line}' for struct in part_of(self.__structs)
-                 for line in struct.generate_add()
+                 for line in struct.generate_add()] + [
+            '}',
         ]
         lines += [
             '',
