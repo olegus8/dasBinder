@@ -673,9 +673,9 @@ class C_Struct(C_InnerNode):
                 continue
             lines += [
                 '',
-               f'addExtern<DAS_BIND_FUN({field.getter_name})>(*this, lib, "{field.getter_name}",',
+               f'addExtern<DAS_BIND_FUN({field.getter_name})>(module, lib, "{field.getter_name}",',
                 '    SideEffects::none, "{field.getter_name}");',
-               f'addExtern<DAS_BIND_FUN({field.setter_name})>(*this, lib, "{field.setter_name}",',
+               f'addExtern<DAS_BIND_FUN({field.setter_name})>(module, lib, "{field.setter_name}",',
                 '    SideEffects::modifyArgument, "{field.setter_name}");',
             ]
         return lines
@@ -781,7 +781,7 @@ class C_Function(C_InnerNode):
 
     def generate_add(self):
         return [
-            f'addExtern<DAS_BIND_FUN({self.name})>(*this, lib, "{self.name}",',
+            f'addExtern<DAS_BIND_FUN({self.name})>(module, lib, "{self.name}",',
             f'    SideEffects::{self.__side_effects}, "{self.name}");',
         ]
 
@@ -859,7 +859,7 @@ class C_MacroConst(C_Item):
 
     def generate_add(self):
         return [
-            f'addConstant(*this,"{self.name}",{self.value});'
+            f'addConstant(module, "{self.name}", {self.value});'
         ]
 
 
