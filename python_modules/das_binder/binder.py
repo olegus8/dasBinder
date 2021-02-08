@@ -324,24 +324,19 @@ class Binder(LoggingObject):
         ]
         lines += [
             '',
-            '    //',
-            '    // functions',
-            '    //',
-            ''] + [
+           f'void addVulkanGeneratedFunctions_{part_i}('
+                'Module & module, ModuleLibrary & lib) {'] + [
            f'    {line}' for function in part_of(self.__functions)
-                 for line in function.generate_add()
+                 for line in function.generate_add()] + [
+            '}',
         ]
         lines += [
             '',
-            '    //',
-            '    // macro constants',
-            '    //',
-            ''] + [
+           f'void addVulkanGeneratedConsts_{part_i}('
+                'Module & module, ModuleLibrary & lib) {'] + [
            f'    {line}' for const in part_of(self.__macro_consts)
-                 for line in const.generate_add()
-        ]
-        lines += [
-            '};',
+                 for line in const.generate_add()] + [
+            '}',
         ]
         return lines
 
