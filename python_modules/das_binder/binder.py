@@ -244,9 +244,10 @@ class Binder(LoggingObject):
             '',
         ]
         for part in range(self.__settings.num_parts):
-            lines += [
-               f'void addVulkanGenerated_{part}(Module &, ModuleLibrary &);'
-            ]
+            for kind in ['Enums', 'OpaqueStructs', 'Structs', 'Functions']:
+                lines += [f'void addVulkanGenerated{kind}_{part}'
+                    '(Module &, ModuleLibrary &);'
+                ]
         lines += [
             '',
            f'class GeneratedModule_{module} : public Module {{',
