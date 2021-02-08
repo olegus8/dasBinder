@@ -666,7 +666,7 @@ class C_Struct(C_InnerNode):
     def generate_add(self):
         lines = []
         lines += [
-            f'addAnnotation(make_smart<{self.name}Annotation>(lib));',
+            f'module.addAnnotation(make_smart<{self.name}Annotation>(lib));',
         ]
         for field in self.fields:
             if not field.is_bit_field:
