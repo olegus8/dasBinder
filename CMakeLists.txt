@@ -59,7 +59,7 @@ IF(NOT DAS_BINDER_INCLUDED)
                     --num_parts ${num_parts}
                     --module_cpp_prefix ${module_cpp_prefix}
                     --module_h_inc_to ${module_h_inc_to}
-                    --module_h ${module_h_inc_to}
+                    --module_h ${module_h}
                     --config ${config}
                     --clang_c_exe ${DAS_BINDER_CLANG_EXE}
                     --include_dirs "${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES};${include_dirs}"
