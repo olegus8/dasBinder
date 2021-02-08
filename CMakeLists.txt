@@ -66,26 +66,26 @@ IF(NOT DAS_BINDER_INCLUDED)
         ENDIF()
     ENDMACRO()
 
-    SET(DAS_BINDER_TEST_SRC
-        ${DAS_BINDER_DIR}/examples/test/bindings.cpp
-        ${DAS_BINDER_DIR}/examples/test/bindings_generated.h.inc
-        ${DAS_BINDER_DIR}/examples/test/bindings_generated.cpp.inc
-        ${DAS_BINDER_DIR}/examples/test/main.cpp
-    )
-
-    add_executable(dasBinderTest ${DAS_BINDER_TEST_SRC})
-    TARGET_LINK_LIBRARIES(dasBinderTest libDaScript)
-    SETUP_CPP11(dasBinderTest)
-
-    get_target_property(DAS_BINDER_TEST_INCLUDE_DIRS dasBinderTest INCLUDE_DIRECTORIES)
-
-    DAS_BINDER(
-        ${DAS_BINDER_DIR}/examples/test/header_to_bind.h
-        ${DAS_BINDER_DIR}/examples/test/bindings_generated.h.inc
-        ${DAS_BINDER_DIR}/examples/test/bindings_generated.cpp.inc
-        ${DAS_BINDER_DIR}/examples/test/binding_config.py
-        ${DAS_BINDER_TEST_INCLUDE_DIRS}
-        ""
-        ""
-    )
+#    SET(DAS_BINDER_TEST_SRC
+#        ${DAS_BINDER_DIR}/examples/test/bindings.cpp
+#        ${DAS_BINDER_DIR}/examples/test/bindings_generated.h.inc
+#        ${DAS_BINDER_DIR}/examples/test/bindings_generated.cpp.inc
+#        ${DAS_BINDER_DIR}/examples/test/main.cpp
+#    )
+#
+#    add_executable(dasBinderTest ${DAS_BINDER_TEST_SRC})
+#    TARGET_LINK_LIBRARIES(dasBinderTest libDaScript)
+#    SETUP_CPP11(dasBinderTest)
+#
+#    get_target_property(DAS_BINDER_TEST_INCLUDE_DIRS dasBinderTest INCLUDE_DIRECTORIES)
+#
+#    DAS_BINDER(
+#        ${DAS_BINDER_DIR}/examples/test/header_to_bind.h
+#        ${DAS_BINDER_DIR}/examples/test/bindings_generated.h.inc
+#        ${DAS_BINDER_DIR}/examples/test/bindings_generated.cpp.inc
+#        ${DAS_BINDER_DIR}/examples/test/binding_config.py
+#        ${DAS_BINDER_TEST_INCLUDE_DIRS}
+#        ""
+#        ""
+#    )
 ENDIF()
