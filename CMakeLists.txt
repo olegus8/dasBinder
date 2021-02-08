@@ -18,9 +18,18 @@ IF(NOT DAS_BINDER_INCLUDED)
     include(${DAS_BINDER_DIR}/dasShared/CMakeLists.txt)
     GET_DAS_SHARED_PY_SRC(DAS_BINDER_SHARED_SRC ${DAS_BINDER_DIR}/dasShared)
 
-    MACRO(DAS_BINDER
+    MACRO(DAS_BINDER_GET_GENERATED_CPP
         num_parts
         module_cpp_parts_var
+        module_cpp_prefix
+    )
+        FOREACH(part_i RANGE ${num_parts})
+            LIST(APPEND ${module_cpp_parts_var} "${module_cpp_prefix}_${part_i}.cpp")
+        ENDFOREACH()
+    ENDMACRO()
+
+    MACRO(DAS_BINDER
+        num_parts
         c_header_from
         module_cpp_prefix
         module_h_to config
@@ -33,12 +42,13 @@ IF(NOT DAS_BINDER_INCLUDED)
         ELSEIF(NOT DAS_BINDER_CLANG_EXE)
             MESSAGE(STATUS "Clang prerequisite for dasBinder not found. Will use pregenerated bindings in ${module_h_to} and ${module_cpp_prefix} for ${c_header_from}.")
         ELSE()
-            FOREACH(part_i RANGE ${num_parts})
-                LIST(APPEND ${module_cpp_parts_var} "${module_cpp_prefix}_${part_i}.cpp")
-            ENDFOREACH()
+            SET(parts_cpp)
+            DAS_BINDER_GET_GENERATED_CPP(
+                ${num_parts} parts_cpp ${module_cpp_prefix}
+            )
             ADD_CUSTOM_COMMAND(
                 DEPENDS ${c_header_from} ${config} ${extra_deps} ${DAS_BINDER_SRC} ${DAS_BINDER_SHARED_SRC}
-                OUTPUT ${module_cpp_prefix}.inc ${module_cpp_parts_var} ${module_h_to} ${extra_outputs}
+                OUTPUT ${module_cpp_prefix}.inc ${parts_cpp} ${module_h_to} ${extra_outputs}
                 WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
                 VERBATIM
                 COMMAND ${Python3_EXECUTABLE} -B ${DAS_BINDER_PY_DIR}/main.py
