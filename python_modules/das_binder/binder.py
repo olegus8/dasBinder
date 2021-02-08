@@ -205,7 +205,7 @@ class Binder(LoggingObject):
             '#pragma once',
             '',
            f'#include "{header_from}"',
-           f'#include "daScript.h"',
+           f'#include "daScript/daScript.h"',
         ]
         lines += [
             '',
